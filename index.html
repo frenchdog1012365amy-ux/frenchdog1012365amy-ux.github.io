@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>經濟實證三期末複習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,700..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* 復古海報冒險地圖：米色紙質背景、粗黑描邊、硬陰影、拱門世界沿著彎曲小路排列。刻意採單一主題（不隨深色模式改變） */
+:root{
+  --paper:#ebe2d1; --cream:#f6efe3; --ink:#1f1c3b; --muted:#5b5674; --soft:#d8ccb6;
+  --blue:#2f55d4; --pink:#ef4f8f; --orange:#f26a2e; --mustard:#ecb630; --purple:#6b4bd8; --teal:#1f9e7a;
+  /* 圖表與既有元件沿用的名稱 */
+  --bg:#efe7d8; --surface:#f6efe3; --line:#d3c6ae; --accent:#ef4f8f; --accent-ink:#ffffff; --accent-soft:#fbd9e6;
+  --sky:#2f55d4; --sky-soft:#dbe3fb; --mint:#1f9e7a; --mint-soft:#d3ede4; --sun:#ecb630; --sun-soft:#fbecc2;
+  --hi:#e0453a; --hi-soft:#f8d6cf; --ok:#1f8a5e; --ok-soft:#d3ecd9; --shadow:rgba(31,28,59,.18);
+  --f-head:"Archivo","Arial Narrow",sans-serif;
+  --f-serif:"Instrument Serif","Times New Roman",serif;
+  --f-zh:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"Space Mono",ui-monospace,Menlo,Consolas,monospace;
+  --hard:5px 5px 0 var(--ink);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .11 0 0 0 0 .23 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+
+/* ── 首頁標題 ── */
+.hero{padding:34px 0 0;position:relative}
+.logo{font-family:var(--f-head);font-weight:900;font-stretch:72%;font-variation-settings:"wdth" 72;font-size:clamp(46px,10.5vw,86px);line-height:.95;letter-spacing:-.025em;color:var(--blue);text-shadow:4px 4px 0 var(--pink);display:flex;flex-wrap:wrap;align-items:baseline;gap:0 .18em}
+.logo em{font-family:var(--f-serif);font-style:italic;font-weight:400;color:var(--ink);text-shadow:none;letter-spacing:0;font-size:1.04em}
+.zh-sub{font-family:var(--f-zh);font-weight:900;font-size:clamp(18px,3.4vw,24px);letter-spacing:.42em;margin-top:16px}
+.tag{font-size:clamp(17px,3.4vw,24px);color:var(--muted);font-weight:500;margin-top:2px}
+.hero-ctrls{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.ticket{display:inline-flex;align-items:center;gap:10px;border:3px solid var(--ink);background:var(--mustard);padding:6px 16px 6px 12px;font-weight:900;border-radius:999px;box-shadow:3px 3px 0 var(--ink);font-family:var(--f-zh)}
+.ticket b{font-family:var(--f-mono);font-size:22px;line-height:1}
+.snd{position:relative;width:62px;height:62px;border-radius:50%;border:3.5px solid var(--ink);background:var(--cream);display:grid;place-items:center;box-shadow:3px 3px 0 var(--ink)}
+.snd svg{width:28px;height:28px}
+.snd .note{position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:var(--pink);color:#fff;border:3px solid var(--ink);display:grid;place-items:center;font-size:14px;line-height:1}
+.snd[aria-pressed="false"] .note{background:var(--soft);color:var(--muted)}
+.snd.sm{width:48px;height:48px}.snd.sm svg{width:22px;height:22px}.snd.sm .note{width:22px;height:22px;font-size:11px;top:-6px;right:-6px}
+
+/* ── 地圖 ── */
+.map{position:relative;margin-top:18px;padding-bottom:40px}
+.dome{display:block;width:calc(100% + 36px);margin:0 -18px;height:auto;aspect-ratio:760/190;position:relative;z-index:2}
+#road{position:absolute;left:0;top:0;width:100%;pointer-events:none;z-index:0;overflow:visible}
+.world{position:relative;display:grid;grid-template-columns:repeat(20,minmax(0,1fr));align-items:start;margin-top:10px}
+.world + .world{margin-top:4px}
+.door{display:block;position:relative;z-index:1;grid-row:1;border:0;padding:0;background:none;transition:transform .18s}
+.w-left .door{grid-column:1 / 13}
+.w-right .door{grid-column:9 / 21}
+.door:hover{transform:translateY(-4px) rotate(-1deg)}
+.door svg{display:block;width:100%;height:auto}
+.wcard{position:relative;z-index:2;grid-row:1;margin-top:clamp(70px,24%,200px);border:3.5px solid var(--ink);border-radius:26px;padding:22px 24px 20px;box-shadow:var(--hard)}
+.w-left .wcard{grid-column:11 / 21}
+.w-right .wcard{grid-column:1 / 11}
+.wcard.dark{background:var(--ink);color:var(--cream)}
+.wcard.light{background:var(--cream);color:var(--ink)}
+.num{display:inline-grid;place-items:center;min-width:58px;height:44px;padding:0 10px;border-radius:999px;font-family:var(--f-mono);font-weight:700;font-size:22px;color:#fff;border:3px solid var(--ink);background:var(--wc)}
+.wcard.dark .num{border-color:var(--cream)}
+.wcard h3{font-family:var(--f-zh);font-weight:900;font-size:clamp(24px,4.6vw,36px);line-height:1.2;margin:12px 0 4px;letter-spacing:.02em}
+.wcard .en{font-weight:700;font-size:15px;color:var(--wc)}
+.wcard.dark .en{color:color-mix(in srgb,var(--wc) 55%,#fff)}
+.wcard p{margin:10px 0 8px;font-size:clamp(15px,2.6vw,18px);line-height:1.65}
+.wcard .stat{font-size:13px;opacity:.8;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stars{letter-spacing:2px;color:var(--mustard)}
+.wcard .enter{border:0;background:none;padding:0;margin-top:8px;font-weight:900;font-size:17px;color:var(--wc);display:inline-flex;gap:8px;align-items:center;font-family:var(--f-zh)}
+.wcard.dark .enter{color:var(--cream)}
+.wcard .enter:hover span{transform:translateX(4px)}
+.wcard .enter span{transition:transform .15s}
+.foot{text-align:center;color:var(--muted);font-size:13px;padding:10px 0 50px}
+
+/* ── 世界內頁 ── */
+.whead{display:grid;grid-template-columns:1fr 132px;gap:16px;align-items:end;padding:22px 0 10px;border-bottom:3.5px solid var(--ink)}
+.whead .back{border:3px solid var(--ink);background:var(--cream);border-radius:999px;padding:4px 14px;font-weight:900;box-shadow:3px 3px 0 var(--ink);font-family:var(--f-zh)}
+.whead .row1{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.whead .kicker{font-weight:700;color:var(--wc);font-size:14px;margin-top:10px}
+.whead h2{font-family:var(--f-zh);font-weight:900;font-size:clamp(30px,6vw,46px);line-height:1.15;letter-spacing:.03em}
+.whead .sub{color:var(--muted);font-size:14px;margin-top:4px}
+.whead .thumb svg{width:100%;height:auto;display:block}
+.tabs{display:flex;gap:10px;padding:16px 0 18px;overflow-x:auto}
+.tab{border:3px solid var(--ink);background:var(--cream);border-radius:999px;padding:6px 16px;font-weight:900;font-size:14.5px;white-space:nowrap;box-shadow:3px 3px 0 var(--ink);font-family:var(--f-zh);transition:transform .1s}
+.tab:hover{transform:translate(-1px,-1px)}
+.tab[aria-selected="true"]{background:var(--wc);color:#fff}
+.work{padding-bottom:80px}
+.tipbar{margin-bottom:16px}
+.bubble{display:inline-block;background:var(--cream);border:3px solid var(--ink);border-radius:18px 18px 18px 4px;padding:8px 16px;font-size:14.5px;box-shadow:3px 3px 0 var(--ink)}
+.card{background:var(--cream);border:3.5px solid var(--ink);border-radius:22px;padding:22px 26px;box-shadow:var(--hard)}
+.stack{display:grid;gap:20px}
+.muted{color:var(--muted)} .small{font-size:13px}
+.btn{border:3px solid var(--ink);background:var(--cream);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:900;display:inline-flex;align-items:center;gap:6px;box-shadow:3px 3px 0 var(--ink);font-family:var(--f-zh);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--pink);color:#fff}
+.btn.sm{padding:3px 11px;font-size:12.5px;box-shadow:2px 2px 0 var(--ink)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* 筆記 */
+.note h3{font-family:var(--f-zh);font-weight:900;font-size:20px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.note h3::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--wc);border:3px solid var(--ink);flex:none}
+.note p{margin:0 0 10px;max-width:70ch}
+.note ul,.note ol{margin:0 0 10px;padding-left:1.4em;max-width:70ch}
+.note li{margin:4px 0}
+.note li::marker{color:var(--wc);font-weight:900}
+.note b{background:linear-gradient(transparent 58%,var(--sun-soft) 58%);font-weight:700}
+table.t{border-collapse:collapse;margin:8px 0 12px;font-size:14px;font-variant-numeric:tabular-nums}
+table.t th,table.t td{border:2.5px solid var(--ink);padding:5px 12px;text-align:center}
+table.t th{background:var(--mustard)}
+mjx-container[display="true"]{margin:.7em 0!important;overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* 模擬 */
+.sim h3{font-family:var(--f-zh);font-weight:900;font-size:20px;margin-bottom:4px}
+.sim .lead{color:var(--muted);font-size:14.5px;margin:0 0 14px;max-width:72ch}
+.ctrls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-bottom:12px}
+.ctrl{display:grid;gap:2px;min-width:180px}
+.ctrl label{font-size:13.5px;font-weight:700;display:flex;justify-content:space-between;gap:10px}
+.ctrl label output{font-family:var(--f-mono);font-weight:700;color:var(--pink)}
+input[type=range]{accent-color:var(--pink);width:100%}
+.seg{display:inline-flex;border:3px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--cream);box-shadow:2px 2px 0 var(--ink)}
+.seg button{border:0;background:none;padding:5px 14px;font-size:13.5px;font-weight:900;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--blue);color:#fff}
+canvas.ch{width:100%;height:220px;display:block;background:#fbf6ec;border:2.5px solid var(--ink);border-radius:14px}
+canvas.ch.short{height:160px}
+.readouts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.ro{background:#fbf6ec;border:2.5px solid var(--ink);border-radius:14px;padding:7px 14px;min-width:120px}
+.ro b{display:block;font-size:22px;font-family:var(--f-mono);line-height:1.35}
+.ro span{font-size:12px;color:var(--muted)}
+.ro.good b{color:var(--ok)} .ro.bad b{color:var(--hi)}
+.verdict{margin-top:10px;padding:8px 14px;border-radius:14px;font-size:14.5px;font-weight:700;border:2.5px solid var(--ink)}
+.verdict.good{background:var(--ok-soft)} .verdict.bad{background:var(--hi-soft)}
+.numin{width:72px;padding:4px 8px;border:2.5px solid var(--ink);border-radius:10px;background:#fbf6ec;font-family:var(--f-mono)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:14px;height:5px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+code{font-family:var(--f-mono);font-size:.9em;background:var(--sun-soft);padding:0 4px;border-radius:4px}
+
+/* 公式卡 */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.flip{perspective:900px;min-height:176px;border:0;padding:0;background:none;text-align:left}
+.flip .inner{position:relative;width:100%;height:100%;min-height:176px;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;border:3.5px solid var(--ink);border-radius:22px;background:var(--cream);box-shadow:var(--hard);padding:16px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px;overflow:hidden}
+.flip .front{align-items:center;text-align:center;background:var(--ink);color:var(--cream)}
+.flip .front b{font-family:var(--f-zh);font-weight:900;font-size:18px}
+.flip .front span{font-size:12px;opacity:.7}
+.flip .back{transform:rotateY(180deg)}
+.flip .back .fx{overflow-x:auto;font-size:14px}
+.flip .back .d{font-size:12.5px;color:var(--muted)}
+
+/* 測驗 */
+.qwrap{max-width:760px}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap;font-family:var(--f-zh)}
+.qprog{flex:1;min-width:160px;height:16px;border-radius:999px;background:var(--cream);border:3px solid var(--ink);overflow:hidden}
+.qprog i{display:block;height:100%;background:var(--wc);transition:width .3s}
+.qcard .qtag{font-family:var(--f-mono);font-size:12px;font-weight:700;color:#fff;background:var(--ink);padding:2px 10px;border-radius:999px}
+.qcard .qq{font-size:18px;font-weight:700;margin:12px 0 16px}
+.opts{display:grid;gap:10px}
+.opt{border:3px solid var(--ink);background:#fbf6ec;border-radius:16px;padding:10px 14px;text-align:left;display:flex;gap:12px;align-items:flex-start;box-shadow:3px 3px 0 var(--ink);transition:transform .1s}
+.opt:hover:not([disabled]){transform:translate(-1px,-1px)}
+.opt .k{flex:none;width:28px;height:28px;border-radius:50%;background:var(--cream);border:2.5px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:13px;font-family:var(--f-mono)}
+.opt.right{background:var(--ok-soft)} .opt.right .k{background:var(--ok);color:#fff}
+.opt.wrong{background:var(--hi-soft)} .opt.wrong .k{background:var(--hi);color:#fff}
+.opt[disabled]{cursor:default}
+.expl{margin-top:14px;border-radius:14px;padding:12px 16px;background:#fbf6ec;border:2.5px dashed var(--ink);font-size:15px}
+.expl b{display:block;margin-bottom:4px;font-family:var(--f-zh);font-weight:900}
+.qfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.result{text-align:center;display:grid;justify-items:center;gap:8px}
+.result .big{font-size:52px;font-family:var(--f-mono);font-weight:700;color:var(--wc);line-height:1.1}
+
+/* R 小抄 */
+pre.code{background:var(--ink);color:#f3ecdf;border-radius:16px;padding:18px 20px;overflow-x:auto;font-family:var(--f-mono);font-size:13px;line-height:1.7;margin:0}
+pre.code .cm{color:#9d98c2}
+.ask textarea{width:100%;min-height:96px;padding:12px 14px;border:3px solid var(--ink);border-radius:16px;background:#fbf6ec;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chipq{border:2.5px dashed var(--ink);background:#fbf6ec;border-radius:999px;padding:3px 12px;font-size:13px}
+.chipq:hover{background:var(--sun-soft)}
+.answer{margin-top:16px}
+.answer h3{font-family:var(--f-zh);font-weight:900;font-size:17px;margin:12px 0 6px}
+.answer p{margin:0 0 10px}
+.answer ul,.answer ol{padding-left:1.4em;margin:0 0 10px}
+.prog{display:flex;align-items:center;gap:14px}
+.loader{display:flex;gap:6px;margin-top:6px}
+.loader i{width:9px;height:9px;border-radius:50%;background:var(--pink);border:2px solid var(--ink);animation:hop 1s ease-in-out infinite}
+.loader i:nth-child(2){background:var(--mustard);animation-delay:.15s}
+.loader i:nth-child(3){background:var(--blue);animation-delay:.3s}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+.mascot{display:block;flex:none}
+.bob{animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.wiggle{animation:wig 1s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.jump{animation:jumpk .6s ease-out 2}
+@keyframes jumpk{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:9px 18px;border-radius:999px;font-size:14px;font-weight:700;z-index:50;border:3px solid var(--cream)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:45;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:10px;height:14px;border-radius:2px;border:2px solid var(--ink);animation:fall 1.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+#petBtn{position:fixed;left:16px;bottom:16px;z-index:41;border:3px solid var(--ink);background:var(--cream);border-radius:999px;padding:5px 14px;font-weight:900;box-shadow:3px 3px 0 var(--ink);font-family:var(--f-zh)}
+@media (prefers-reduced-motion: reduce){.bob,.wiggle,.jump,.loader i,.flip .inner{animation:none;transition:none}.confetti{display:none}.door,.btn,.tab,.opt{transition:none}}
+@media (max-width:640px){
+  .wcard{padding:14px 14px 12px;border-radius:20px}
+  .num{min-width:48px;height:38px;font-size:18px}
+  .whead{grid-template-columns:1fr 92px}
+  .card{padding:16px 18px}
+  .two{grid-template-columns:1fr}
+}
+
+/* ── 窗戶互動 ── */
+.howto{display:inline-block;margin-top:12px;font-size:14px;font-weight:700;background:var(--cream);border:2.5px dashed var(--ink);border-radius:999px;padding:3px 14px}
+.door,.whead .thumb{cursor:pointer}
+.whead .thumb{border:0;background:none;padding:0;transition:transform .15s}
+.whead .thumb:hover{transform:translateY(-3px)}
+.door:active,.whead .thumb:active{transform:scale(.97)}
+.doorsvg .cow{transform-box:fill-box;transform-origin:center;animation:graze 2.6s ease-in-out infinite}
+@keyframes graze{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.doorsvg .throw .rope{stroke-dasharray:1;stroke-dashoffset:1;animation:drawk .55s ease-out forwards}
+.doorsvg .redraw .hist{stroke-dasharray:1;stroke-dashoffset:1;animation:drawk .8s ease-out forwards}
+.doorsvg .redraw .fan,.doorsvg .redraw .fc{animation:fadein .5s ease-out .6s both}
+@keyframes drawk{to{stroke-dashoffset:0}}
+@keyframes fadein{from{opacity:0}}
+.doorsvg .pop{transform-box:fill-box;transform-origin:center;animation:popk .45s ease-out}
+@keyframes popk{40%{transform:scale(1.18)}}
+.doorsvg .cloud{animation:drift 8s ease-in-out infinite alternate}
+.doorsvg .cloud.c2{animation-duration:11s;animation-direction:alternate-reverse}
+@keyframes drift{from{transform:translateX(-12px)}to{transform:translateX(14px)}}
+.doorsvg .vane{transform-box:fill-box;transform-origin:left center}
+.doorsvg .spin{transform-box:fill-box;transform-origin:center;animation:spink .7s ease-in-out}
+.doorsvg .vane.spin{transform-origin:left center}
+@keyframes spink{to{transform:rotate(360deg)}}
+.doorsvg .flake{animation:snowk linear infinite}
+@keyframes snowk{from{transform:translateY(-70px)}to{transform:translateY(250px)}}
+.doorsvg.frost .flake{animation-duration:1.4s!important}
+.doorsvg .merc{transition:y .5s,height .5s}
+.doorsvg .star{animation:twinkle 2.2s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.2}}
+.doorsvg .spot{transform-box:view-box;transform-origin:150px 60px;animation:sweep 4s ease-in-out infinite alternate}
+@keyframes sweep{from{transform:rotate(-12deg)}to{transform:rotate(12deg)}}
+.doorsvg .jump{transform-box:fill-box;transform-origin:center bottom;animation:tjump .65s ease-out}
+@keyframes tjump{40%{transform:translateY(-28px) rotate(-8deg)}}
+.doorsvg .cf{transform-box:fill-box;transform-origin:center;animation:cfall 1.3s ease-in forwards}
+@keyframes cfall{to{transform:translateY(270px) rotate(320deg)}}
+.doorsvg .lamp{transform-box:view-box;transform-origin:150px 40px;animation:swing 3s ease-in-out infinite alternate}
+@keyframes swing{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.doorsvg .mk-bad,.doorsvg .mk-fix{transition:opacity .3s}
+.dome .flag{transform-box:fill-box;transform-origin:left center;animation:flap 1.6s ease-in-out infinite alternate}
+.dome .flag.f2{animation-delay:-.8s}
+@keyframes flap{from{transform:scaleX(1)}to{transform:scaleX(.82)}}
+.stars-big{font-size:34px;letter-spacing:6px;color:var(--mustard);-webkit-text-stroke:1.5px var(--ink)}
+@media (prefers-reduced-motion: reduce){.doorsvg .cow,.doorsvg .cloud,.doorsvg .flake,.doorsvg .star,.doorsvg .spot,.doorsvg .lamp,.dome .flag{animation:none!important}}
+</style>
+<script>
+window.MathJax = { tex:{inlineMath:[["$","$"]], displayMath:[["$$","$$"]], processEscapes:true}, svg:{fontCache:"global"}, options:{enableMenu:false} };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* 經濟實證三 期末複習內容：Stock & Watson, Introduction to Econometrics, 4th Global Edition, Ch.14–17 */
+const CH = [
+{
+  id:"14", title:"大量預測變數與大數據的預測", en:"Prediction with Many Regressors and Big Data",
+  week:"12/11（R 挑戰三：12/11）",
+  sims:["shrink","mspe"],
+  notes:[
+    {h:"一、預測與因果推論的差別", b:String.raw`
+<p>本章的目標是<b>樣本外預測</b>：用估計樣本以外的觀察值 $(X^{oos}, Y^{oos})$ 評估預測好壞，而不是解釋係數的因果意義。係數有遺漏變數偏誤也沒關係，只要預測準。</p>
+<p>預測好壞的標準是<b>均方預測誤差（MSPE）</b>：</p>
+$$\text{MSPE}=E\left[\left(Y^{oos}-\hat Y(X^{oos})\right)^2\right]=\sigma_u^2+E\left[\left(\hat Y(X^{oos})-E(Y^{oos}\mid X^{oos})\right)^2\right]$$
+<ul><li>第一項 $\sigma_u^2$：即使知道真實條件期望值（oracle prediction）也無法消除的誤差。</li><li>第二項：估計係數造成的誤差，是可以靠方法改善的部分。</li></ul>`},
+    {h:"二、多預測變數時的 OLS", b:String.raw`
+<p>先將預測變數<b>標準化</b>（平均 0、變異數 1），並將 $Y$ 去平均，模型不含截距。在同質變異等條件下：</p>
+$$\text{MSPE}_{OLS}\approx\left(1+\frac{k}{n}\right)\sigma_u^2$$
+<p>$k$ 接近 $n$ 時，OLS 的估計誤差會讓 MSPE 大幅上升；$k>n$ 時 OLS 甚至無法計算。這是需要縮減估計的原因。</p>`},
+    {h:"三、縮減原則（Principle of Shrinkage）", b:String.raw`
+<p>把估計值往 0 拉近，會<b>增加偏誤、降低變異數</b>。只要變異數下降得比偏誤平方增加得多，MSPE 就會下降。James–Stein 估計量證明：預測變數夠多時（$k\ge 3$），縮減估計量可以比 OLS 有更低的 MSPE。</p>`},
+    {h:"四、脊迴歸（Ridge Regression）", b:String.raw`
+$$S^{Ridge}(b)=\sum_{i=1}^{n}\left(Y_i-b_1X_{1i}-\cdots-b_kX_{ki}\right)^2+\lambda\sum_{j=1}^{k}b_j^2$$
+<ul><li>懲罰項是係數<b>平方和</b>，$\lambda$ 越大縮得越多。</li><li>若預測變數正交且標準化（$X'X=I$）：$\hat\beta_j^{Ridge}=\hat\beta_j/(1+\lambda)$，等比例縮小，<b>不會剛好變成 0</b>。</li><li>適合「很多預測變數、每個效果都不大」的情況。</li></ul>`},
+    {h:"五、Lasso", b:String.raw`
+$$S^{Lasso}(b)=\sum_{i=1}^{n}\left(Y_i-b_1X_{1i}-\cdots-b_kX_{ki}\right)^2+\lambda\sum_{j=1}^{k}|b_j|$$
+<ul><li>懲罰項是係數<b>絕對值和</b>。</li><li>正交情況下為軟門檻（soft thresholding）：$\hat\beta_j^{Lasso}=\text{sign}(\hat\beta_j)\max\left(|\hat\beta_j|-\lambda/2,\,0\right)$。</li><li>小係數會被設為<b>剛好 0</b>，同時做變數選擇，得到稀疏（sparse）模型。</li><li>適合「只有少數預測變數重要」的情況。</li></ul>`},
+    {h:"六、主成分（Principal Components）", b:String.raw`
+<ul><li>第一主成分 $PC_1=\sum_j w_{1j}X_j$：在 $\sum_j w_{1j}^2=1$ 限制下，使變異數最大的線性組合。</li><li>第二主成分：與 $PC_1$ 不相關的條件下，變異數最大的線性組合，依此類推。</li><li>用前 $p$ 個主成分當迴歸元，把 $k$ 維壓縮成 $p$ 維。可用陡坡圖（scree plot）看各主成分解釋的變異比例。</li><li>適合預測變數彼此高度相關、具有共同因子結構的資料。</li></ul>`},
+    {h:"七、用交叉驗證選擇 λ 或 p", b:String.raw`
+<p><b>m 折交叉驗證（m-fold cross validation）</b>：</p>
+<ol><li>把樣本隨機分成 $m$ 份。</li><li>每次用 $m-1$ 份估計，對剩下的 1 份做預測，計算預測誤差平方。</li><li>重複 $m$ 次，取平均得到 $\widehat{\text{MSPE}}_{m\text{-fold}}$。</li><li>選擇使其最小的 $\lambda$（或主成分個數 $p$）。</li></ol>
+<p>最後再用完全沒用過的<b>測試樣本</b>評估所選模型的樣本外表現。</p>`}
+  ],
+  formulas:[
+    {n:"MSPE 分解", t:String.raw`\text{MSPE}=\sigma_u^2+E\left[\left(\hat Y(X^{oos})-E(Y^{oos}|X^{oos})\right)^2\right]`, d:"無法消除的誤差＋估計誤差"},
+    {n:"OLS 的 MSPE（k 個標準化預測變數）", t:String.raw`\text{MSPE}_{OLS}\approx\left(1+\tfrac{k}{n}\right)\sigma_u^2`, d:"k/n 越大越差"},
+    {n:"Ridge 目標函數", t:String.raw`\sum_i(Y_i-X_i'b)^2+\lambda\sum_j b_j^2`, d:"平方懲罰，不會設為 0"},
+    {n:"Ridge（正交情況）", t:String.raw`\hat\beta_j^{Ridge}=\frac{\hat\beta_j}{1+\lambda}`, d:"等比例縮小"},
+    {n:"Lasso 目標函數", t:String.raw`\sum_i(Y_i-X_i'b)^2+\lambda\sum_j|b_j|`, d:"絕對值懲罰，產生稀疏解"},
+    {n:"Lasso（正交情況）", t:String.raw`\hat\beta_j^{Lasso}=\text{sign}(\hat\beta_j)\max\left(|\hat\beta_j|-\tfrac{\lambda}{2},0\right)`, d:"軟門檻"},
+    {n:"第一主成分", t:String.raw`\max_{w}\ \text{var}\Big(\sum_j w_jX_j\Big)\ \text{s.t.}\ \sum_j w_j^2=1`, d:"變異數最大的線性組合"}
+  ],
+  quiz:[
+    {q:"關於「預測」與「因果推論」，下列何者正確？", o:["預測時迴歸係數必須無遺漏變數偏誤","預測的目標是讓樣本外 MSPE 最小，係數不需要有因果解釋","預測時只看樣本內 $R^2$ 即可","預測模型不能使用 OLS"], a:1, e:"預測只在乎 $\\hat Y$ 是否接近 $Y^{oos}$。係數即使有遺漏變數偏誤，只要預測準就好；樣本內 $R^2$ 會高估樣本外表現。"},
+    {q:"$n=200$、$k=100$ 個標準化預測變數，OLS 的 MSPE 約為多少？", o:["$1.0\\,\\sigma_u^2$","$1.5\\,\\sigma_u^2$","$2.0\\,\\sigma_u^2$","$0.5\\,\\sigma_u^2$"], a:1, e:"$\\text{MSPE}_{OLS}\\approx(1+k/n)\\sigma_u^2=(1+100/200)\\sigma_u^2=1.5\\sigma_u^2$。"},
+    {q:"哪一種方法可以把某些係數估計為「剛好 0」？", o:["OLS","Ridge","Lasso","主成分迴歸"], a:2, e:"Lasso 的絕對值懲罰在 0 有尖點，形成軟門檻，小係數會被設為 0；Ridge 只會等比例縮小。"},
+    {q:"為什麼使用 Ridge 或 Lasso 前要先將預測變數標準化？", o:["讓 OLS 不偏","懲罰項取決於係數大小，而係數大小受變數單位影響","讓殘差同質變異","為了計算 $R^2$"], a:1, e:"若不標準化，改變變數單位就會改變係數大小，懲罰的輕重也跟著改變，結果不具可比性。"},
+    {q:"正交且標準化的預測變數下，OLS 估計值 $\\hat\\beta_j=3$、$\\lambda=2$，Ridge 估計值為？", o:["1","1.5","2","3"], a:0, e:"$\\hat\\beta^{Ridge}=\\hat\\beta/(1+\\lambda)=3/3=1$。"},
+    {q:"同上（$\\hat\\beta_j=3$、$\\lambda=2$），Lasso 估計值為？", o:["1","2","3","0"], a:1, e:"軟門檻：$\\text{sign}(3)\\max(3-\\lambda/2,0)=3-1=2$。"},
+    {q:"縮減估計量能降低 MSPE 的原因是？", o:["它同時降低偏誤與變異數","它增加偏誤，但變異數下降得更多","它讓估計量一致","它消除了 $\\sigma_u^2$"], a:1, e:"縮減是偏誤與變異數的取捨：估計量往 0 拉會產生偏誤，但變異數下降更多時，MSPE 下降。$\\sigma_u^2$ 無法消除。"},
+    {q:"選擇 Ridge 的 $\\lambda$ 最常用的方法是？", o:["使樣本內 SSR 最小","m 折交叉驗證，使估計的 MSPE 最小","使 $R^2$ 最大","固定 $\\lambda=1$"], a:1, e:"樣本內 SSR 在 $\\lambda=0$（OLS）最小，無法用來選 $\\lambda$；要用交叉驗證估計樣本外 MSPE。"},
+    {q:"關於主成分，下列何者錯誤？", o:["各主成分彼此不相關","第一主成分是變異數最大的標準化線性組合","主成分的權重是依照與 $Y$ 的相關性選擇","可用陡坡圖判斷保留幾個主成分"], a:2, e:"主成分只使用 $X$ 的資訊（變異數最大），與 $Y$ 無關；這是它和 Lasso、Ridge 不同之處。"}
+  ],
+  r:String.raw`# Ch14 大量預測變數：glmnet 與主成分
+library(glmnet)
+x <- scale(as.matrix(X))          # 標準化預測變數
+y <- Y - mean(Y)                  # 去平均
+
+# Ridge：alpha = 0；Lasso：alpha = 1
+cv_ridge <- cv.glmnet(x, y, alpha = 0, nfolds = 10)
+cv_lasso <- cv.glmnet(x, y, alpha = 1, nfolds = 10)
+cv_ridge$lambda.min               # 交叉驗證選出的 lambda
+coef(cv_lasso, s = "lambda.min")  # Lasso 係數（很多是 0）
+
+# 主成分
+pc <- prcomp(x, center = TRUE, scale. = TRUE)
+summary(pc)                       # 各主成分解釋的變異比例
+plot(pc, type = "l")              # 陡坡圖
+fit_pc <- lm(y ~ pc$x[, 1:5])     # 用前 5 個主成分預測
+# 注意：glmnet 的懲罰項尺度與課本略有不同（目標函數除以 2n）`
+},
+{
+  id:"15", title:"時間序列迴歸與預測導論", en:"Introduction to Time Series Regression and Forecasting",
+  week:"10/16、10/23、10/30（R 挑戰二：11/20）",
+  sims:["ar","spurious"],
+  notes:[
+    {h:"一、時間序列的基本工具", b:String.raw`
+<ul><li>落後期：$Y_{t-j}$；一階差分：$\Delta Y_t=Y_t-Y_{t-1}$。</li><li>對數差分近似成長率：$100\times\Delta\ln Y_t\approx$ 百分比變動；季資料年化成長率 $\approx 400\times\Delta\ln Y_t$。</li><li>第 $j$ 階自我相關：$\rho_j=\dfrac{\text{cov}(Y_t,Y_{t-j})}{\sqrt{\text{var}(Y_t)\text{var}(Y_{t-j})}}$。</li></ul>`},
+    {h:"二、定態（Stationarity）", b:String.raw`
+<p>若 $(Y_{s+1},\dots,Y_{s+T})$ 的聯合機率分配不隨 $s$ 改變，則 $Y_t$ 為定態：未來在機率意義上像過去，才能用歷史資料預測未來。</p>`},
+    {h:"三、自我迴歸模型與預測誤差", b:String.raw`
+$$\text{AR}(p):\ Y_t=\beta_0+\beta_1Y_{t-1}+\cdots+\beta_pY_{t-p}+u_t$$
+<ul><li>預測值：$\hat Y_{T+1|T}=\hat\beta_0+\hat\beta_1Y_T+\cdots+\hat\beta_pY_{T-p+1}$。</li><li><b>預測誤差</b> $Y_{T+1}-\hat Y_{T+1|T}$ 是樣本外的；<b>殘差</b>是樣本內的，兩者不同。</li><li>$\text{MSFE}=E\left[(Y_{T+1}-\hat Y_{T+1|T})^2\right]=\sigma_u^2+\text{估計誤差的變異}$；RMSFE 為其平方根。</li></ul>`},
+    {h:"四、ADL 模型與 Granger 因果", b:String.raw`
+$$\text{ADL}(p,q):\ Y_t=\beta_0+\sum_{i=1}^{p}\beta_iY_{t-i}+\sum_{j=1}^{q}\delta_jX_{t-j}+u_t$$
+<p><b>時間序列迴歸的最小平方假設</b>：</p>
+<ol><li>$E(u_t\mid Y_{t-1},Y_{t-2},\dots,X_{t-1},X_{t-2},\dots)=0$。</li><li>$(Y_t,X_t)$ 為定態，且 $j$ 很大時 $(Y_t,X_t)$ 與 $(Y_{t-j},X_{t-j})$ 趨於獨立（弱相依）。</li><li>大型離群值不太可能出現（四階動差有限）。</li><li>沒有完全共線性。</li></ol>
+<p><b>Granger 因果檢定</b>：檢定 $X$ 的所有落後項係數同時為 0 的 F 檢定。拒絕表示 $X$ 對預測 $Y$ 有幫助，<b>不代表</b>真正的因果關係。</p>`},
+    {h:"五、預測的不確定性", b:String.raw`
+<p>估計 RMSFE 的三種方法：</p>
+<ul><li><b>SER 法</b>：$\widehat{\text{MSFE}}_{SER}=s_{\hat u}^2$，忽略估計誤差。</li><li><b>最終預測誤差（FPE）</b>：$\widehat{\text{MSFE}}_{FPE}=\left(\dfrac{T+p+1}{T}\right)s_{\hat u}^2$，在定態與同質變異下納入估計誤差。</li><li><b>虛擬樣本外預測（POOS）</b>：只用到第 $s$ 期的資料估計並預測 $s+1$ 期，滾動重複，用實際預測誤差計算 RMSFE；同時反映估計誤差與可能的結構變化。</li></ul>
+<p>95% 預測區間：$\hat Y_{T+1|T}\pm 1.96\times\widehat{\text{RMSFE}}$（假設誤差常態）。</p>`},
+    {h:"六、選擇落後期數：資訊準則", b:String.raw`
+$$\text{BIC}(p)=\ln\left[\frac{SSR(p)}{T}\right]+(p+1)\frac{\ln T}{T},\qquad \text{AIC}(p)=\ln\left[\frac{SSR(p)}{T}\right]+(p+1)\frac{2}{T}$$
+<ul><li>BIC 是<b>一致</b>的：大樣本下選到真實落後期數的機率趨近 1。</li><li>AIC 懲罰較輕，大樣本下仍有正機率<b>高估</b> $p$；但多放幾個落後項通常對預測傷害不大。</li><li>ADL 模型把 $(p+1)$ 換成全部係數個數 $K$。</li></ul>`},
+    {h:"七、非定態 I：趨勢與單根", b:String.raw`
+<ul><li>確定性趨勢：$t$ 的非隨機函數。隨機趨勢：例如隨機漫步 $Y_t=Y_{t-1}+u_t$（有漂移：$Y_t=\beta_0+Y_{t-1}+u_t$），$\text{var}(Y_t)$ 隨時間增加。</li><li>AR(1) 中 $\beta_1=1$ 稱為<b>單根</b>。</li></ul>
+<p><b>隨機趨勢造成的問題</b>：(1) AR 係數估計值偏向 0；(2) t 統計量在大樣本下也不是常態分配；(3) <b>假性迴歸</b>：兩個獨立的隨機漫步互相迴歸，經常得到「顯著」的係數。</p>
+<p><b>Dickey–Fuller 檢定</b>：</p>
+$$\Delta Y_t=\beta_0+\delta Y_{t-1}+u_t,\qquad H_0:\delta=0\ (\text{單根})\ \text{vs.}\ H_1:\delta<0$$
+<p>ADF 再加入 $\Delta Y_{t-1},\dots,\Delta Y_{t-p}$；含時間趨勢則加入 $\alpha t$。臨界值不是常態：</p>
+<table class="t"><tr><th>模型</th><th>10%</th><th>5%</th><th>1%</th></tr><tr><td>只含截距</td><td>−2.57</td><td>−2.86</td><td>−3.43</td></tr><tr><td>截距＋時間趨勢</td><td>−3.12</td><td>−3.41</td><td>−3.96</td></tr></table>
+<p>處理方式：若有單根，改用差分後的序列建模。</p>`},
+    {h:"八、非定態 II：結構性斷裂", b:String.raw`
+<ul><li><b>已知斷裂日 τ</b>：Chow 檢定。加入 $D_t(\tau)$（$t>\tau$ 時為 1）及其與迴歸元的交乘項，F 檢定這些係數是否同時為 0。</li><li><b>未知斷裂日</b>：QLR 檢定 $=\max F(\tau)$，$\tau$ 在樣本中間（常見前後各修剪 15%）。臨界值比一般 F 大，需查專用表（例如 1 個限制、15% 修剪時，5% 臨界值約 8.68）。</li><li>POOS 預測表現明顯變差，也是模型可能不穩定的訊號。</li></ul>`}
+  ],
+  formulas:[
+    {n:"自我相關", t:String.raw`\rho_j=\frac{\text{cov}(Y_t,Y_{t-j})}{\sqrt{\text{var}(Y_t)\,\text{var}(Y_{t-j})}}`, d:"第 j 階序列相關"},
+    {n:"AR(p)", t:String.raw`Y_t=\beta_0+\beta_1Y_{t-1}+\cdots+\beta_pY_{t-p}+u_t`, d:"用自身落後項預測"},
+    {n:"MSFE", t:String.raw`\text{MSFE}=E\left[(Y_{T+1}-\hat Y_{T+1|T})^2\right]`, d:"RMSFE 為平方根"},
+    {n:"FPE 估計", t:String.raw`\widehat{\text{MSFE}}_{FPE}=\frac{T+p+1}{T}\,s_{\hat u}^2`, d:"納入估計誤差"},
+    {n:"BIC", t:String.raw`\text{BIC}(p)=\ln\frac{SSR(p)}{T}+(p+1)\frac{\ln T}{T}`, d:"一致的落後期選擇"},
+    {n:"AIC", t:String.raw`\text{AIC}(p)=\ln\frac{SSR(p)}{T}+(p+1)\frac{2}{T}`, d:"可能高估 p"},
+    {n:"Dickey–Fuller 迴歸", t:String.raw`\Delta Y_t=\beta_0+\delta Y_{t-1}+u_t,\ H_0:\delta=0`, d:"5% 臨界值 −2.86（只含截距）"},
+    {n:"預測區間", t:String.raw`\hat Y_{T+1|T}\pm1.96\times\widehat{\text{RMSFE}}`, d:"95%，假設常態"}
+  ],
+  quiz:[
+    {q:"「定態」的意思是？", o:["序列的值不隨時間改變","序列的聯合機率分配不隨時間平移而改變","序列沒有自我相關","序列的平均數為 0"], a:1, e:"定態是機率分配不隨時間改變，序列本身當然可以波動，也可以有自我相關。"},
+    {q:"季資料中，$400\\times[\\ln(GDP_t)-\\ln(GDP_{t-1})]$ 近似於？", o:["季成長率（%）","年化成長率（%）","GDP 水準","自我相關係數"], a:1, e:"$100\\times\\Delta\\ln$ 是季百分比變動，再乘 4 即為年化成長率。"},
+    {q:"關於 BIC 與 AIC，下列何者正確？", o:["AIC 是一致的，BIC 會高估落後期數","BIC 是一致的，AIC 大樣本下仍可能高估落後期數","兩者都一定會低估落後期數","兩者懲罰項相同"], a:1, e:"BIC 懲罰 $\\ln T/T$ 比 AIC 的 $2/T$ 重（$T\\ge 8$ 時），大樣本下能一致選出真實 $p$；AIC 有正機率選太多。"},
+    {q:"Granger 因果檢定在檢定什麼？", o:["$X$ 是否真正造成 $Y$","$X$ 的所有落後項係數是否同時為 0","$Y$ 是否為定態","殘差是否有序列相關"], a:1, e:"Granger 因果是「預測上的有用性」，以 F 檢定 $X$ 的落後項聯合顯著性，不等於真正的因果關係。"},
+    {q:"Dickey–Fuller 檢定（只含截距）得到 $t=-2.5$，在 5% 顯著水準下應？", o:["拒絕單根，序列為定態","無法拒絕單根","拒絕定態","改用常態臨界值 −1.645 判斷"], a:1, e:"DF 的 5% 臨界值是 −2.86，$-2.5>-2.86$，無法拒絕 $H_0:\\delta=0$（單根）。不能用常態臨界值。"},
+    {q:"下列何者「不是」隨機趨勢造成的問題？", o:["AR 係數估計值偏向 0","t 統計量非常態分配","可能出現假性迴歸","OLS 估計量的抽樣分配在大樣本下為常態"], a:3, e:"正是因為大樣本下不是常態，才需要 DF 的特殊臨界值。"},
+    {q:"斷裂日未知時，應使用哪一種檢定？", o:["Chow 檢定","QLR 檢定","Dickey–Fuller 檢定","Granger 因果檢定"], a:1, e:"QLR 取中間樣本所有可能斷裂日的 Chow F 統計量最大值，臨界值需查專用表。"},
+    {q:"哪一種 RMSFE 估計方法同時反映估計誤差與可能的結構變化？", o:["SER 法","FPE 法","虛擬樣本外預測（POOS）","樣本內 $R^2$"], a:2, e:"POOS 用真實的滾動預測誤差計算，模型若不穩定也會反映在誤差上；FPE 假設定態與同質變異。"},
+    {q:"預測誤差與 OLS 殘差的差別是？", o:["兩者完全相同","預測誤差是樣本外的，殘差是樣本內的","殘差是樣本外的","預測誤差的平均一定是 0"], a:1, e:"預測誤差 $Y_{T+1}-\\hat Y_{T+1|T}$ 中 $Y_{T+1}$ 不在估計樣本內；殘差是估計樣本內的配適誤差。"},
+    {q:"$\\hat Y_{T+1|T}=2.5$，$\\widehat{\\text{RMSFE}}=1.2$，95% 預測區間約為？", o:["$[1.3,\\,3.7]$","$[0.15,\\,4.85]$","$[2.26,\\,2.74]$","$[-0.1,\\,5.1]$"], a:1, e:"$2.5\\pm1.96\\times1.2=2.5\\pm2.35$，即 $[0.15,4.85]$。"}
+  ],
+  r:String.raw`# Ch15 時間序列迴歸與預測
+library(dynlm); library(urca); library(strucchange)
+y <- ts(GDPGR, start = c(1962, 1), frequency = 4)
+
+# AR(2) 與 ADL(2,2)
+ar2  <- dynlm(y ~ L(y, 1:2))
+adl  <- dynlm(y ~ L(y, 1:2) + L(TSpread, 1:2))
+BIC(ar2); AIC(ar2)                     # 注意：R 的 BIC/AIC 尺度與課本不同，但排序相同
+
+# Granger 因果：TSpread 的落後項是否聯合為 0
+library(car)
+linearHypothesis(adl, c("L(TSpread, 1:2)1 = 0", "L(TSpread, 1:2)2 = 0"),
+                 vcov. = sandwich::vcovHC(adl, type = "HC1"))
+
+# ADF 檢定：type = "drift" 只含截距；"trend" 含時間趨勢
+summary(ur.df(log(GDP), type = "trend", lags = 2))
+
+# QLR：15% 修剪的 Chow F 統計量序列（先手動建立落後項）
+d <- na.omit(ts.union(y, y1 = stats::lag(y, -1), y2 = stats::lag(y, -2),
+                      s1 = stats::lag(TSpread, -1), s2 = stats::lag(TSpread, -2)))
+qlr <- Fstats(y ~ y1 + y2 + s1 + s2, data = d, from = 0.15)
+sctest(qlr, type = "supF")                  # supF 即 QLR 統計量`
+},
+{
+  id:"16", title:"動態因果效果的估計", en:"Estimation of Dynamic Causal Effects",
+  week:"11/13、11/20（R 挑戰三：12/11）",
+  sims:["dl","nw"],
+  notes:[
+    {h:"一、分配落後模型與動態乘數", b:String.raw`
+$$Y_t=\beta_0+\beta_1X_t+\beta_2X_{t-1}+\cdots+\beta_{r+1}X_{t-r}+u_t$$
+<ul><li>$\beta_1$：衝擊效果（0 期動態乘數）。</li><li>$\beta_{h+1}$：$X$ 變動後第 $h$ 期的<b>動態乘數</b>。</li><li><b>累積動態乘數</b>（第 $h$ 期）：$\beta_1+\beta_2+\cdots+\beta_{h+1}$。</li><li><b>長期累積乘數</b>：$\beta_1+\beta_2+\cdots+\beta_{r+1}$。</li></ul>`},
+    {h:"二、兩種外生性", b:String.raw`
+<ul><li><b>過去與現在外生</b>：$E(u_t\mid X_t,X_{t-1},X_{t-2},\dots)=0$。</li><li><b>嚴格外生</b>：$E(u_t\mid \dots,X_{t+1},X_t,X_{t-1},\dots)=0$，連未來的 $X$ 也與 $u_t$ 無關。</li><li>嚴格外生 ⇒ 過去與現在外生，反之不成立。若 $Y$ 會回饋影響未來的 $X$（例如政策依據結果調整），嚴格外生就不成立。</li></ul>`},
+    {h:"三、OLS 與 HAC 標準誤", b:String.raw`
+<p>在過去與現在外生、定態弱相依、大型離群值不太可能、無完全共線性等假設下，OLS 是一致的。但 $u_t$ 通常有<b>序列相關</b>，一般（含異質變異穩健的）標準誤會失效，需要<b>異質變異與自我相關一致（HAC）</b>標準誤。</p>
+$$\text{var}(\hat\beta_1)=\frac{1}{T}\frac{\sigma_v^2}{(\sigma_X^2)^2}f_T,\qquad f_T=1+2\sum_{j=1}^{T-1}\frac{T-j}{T}\rho_j$$
+<p>其中 $v_t=(X_t-\mu_X)u_t$，$\rho_j$ 是 $v_t$ 的自我相關。Newey–West 估計：</p>
+$$\hat f_T=1+2\sum_{j=1}^{m-1}\left(\frac{m-j}{m}\right)\tilde\rho_j,\qquad m=0.75\,T^{1/3}\ (\text{四捨五入為整數})$$`},
+    {h:"四、直接估計累積乘數", b:String.raw`
+<p>把模型改寫為：</p>
+$$Y_t=\delta_0+\delta_1\Delta X_t+\delta_2\Delta X_{t-1}+\cdots+\delta_r\Delta X_{t-r+1}+\delta_{r+1}X_{t-r}+u_t$$
+<p>$\delta_1,\delta_2,\dots$ 就是累積動態乘數，$\delta_{r+1}$ 是長期累積乘數，可以直接用 HAC 標準誤做推論。</p>`},
+    {h:"五、嚴格外生下的 ADL 與 GLS", b:String.raw`
+<p>若誤差為 AR(1)：$u_t=\phi_1u_{t-1}+\tilde u_t$，以只有一個落後項的分配落後模型為例，經準差分（quasi-difference）可寫成：</p>
+$$\tilde Y_t=\alpha_0+\beta_1\tilde X_t+\beta_2\tilde X_{t-1}+\tilde u_t,\qquad \tilde Y_t=Y_t-\phi_1Y_{t-1}$$
+<ul><li><b>不可行 GLS</b>：$\phi_1$ 已知時，對準差分後的資料做 OLS。</li><li><b>可行 GLS</b>：先估計 $\phi_1$（Cochrane–Orcutt，可反覆迭代），再做準差分迴歸。</li><li>GLS 比 OLS 有效率，但<b>需要嚴格外生</b>；只有過去與現在外生時，GLS 與 ADL 估計可能不一致，此時應用 OLS＋HAC。</li></ul>`},
+    {h:"六、應用：柳橙汁價格與冰凍天數", b:String.raw`
+<ul><li>$Y_t$：柳橙汁價格月變動率 $100\times\Delta\ln P_t$；$X_t$：佛羅里達的冰凍度日數（FDD）。</li><li>天氣不受柳橙汁價格影響，過去與現在外生的假設合理，因此可用 OLS＋HAC 估計動態乘數。</li><li>結果顯示冰凍對價格的影響在當月最大，之後逐漸消退；累積乘數可看出長期效果。</li></ul>`}
+  ],
+  formulas:[
+    {n:"分配落後模型", t:String.raw`Y_t=\beta_0+\beta_1X_t+\beta_2X_{t-1}+\cdots+\beta_{r+1}X_{t-r}+u_t`, d:"β_{h+1} 為第 h 期動態乘數"},
+    {n:"累積動態乘數", t:String.raw`\text{CM}_h=\beta_1+\beta_2+\cdots+\beta_{h+1}`, d:"h=r 時為長期累積乘數"},
+    {n:"過去與現在外生", t:String.raw`E(u_t\mid X_t,X_{t-1},\dots)=0`, d:"OLS 一致的條件"},
+    {n:"嚴格外生", t:String.raw`E(u_t\mid\dots,X_{t+1},X_t,X_{t-1},\dots)=0`, d:"GLS 需要的條件"},
+    {n:"f_T 修正因子", t:String.raw`f_T=1+2\sum_{j=1}^{T-1}\frac{T-j}{T}\rho_j`, d:"序列相關讓變異數放大"},
+    {n:"Newey–West", t:String.raw`\hat f_T=1+2\sum_{j=1}^{m-1}\frac{m-j}{m}\tilde\rho_j,\ \ m=0.75T^{1/3}`, d:"截斷參數 m"},
+    {n:"累積乘數直接迴歸", t:String.raw`Y_t=\delta_0+\sum_{i=1}^{r}\delta_i\Delta X_{t-i+1}+\delta_{r+1}X_{t-r}+u_t`, d:"δ 即累積乘數"}
+  ],
+  quiz:[
+    {q:"分配落後模型中，$X_{t-2}$ 的係數 $\\beta_3$ 代表？", o:["衝擊效果","$X$ 變動後第 2 期的動態乘數","第 2 期的累積動態乘數","長期累積乘數"], a:1, e:"$\\beta_{h+1}$ 是第 $h$ 期動態乘數，$h=2$ 對應 $\\beta_3$。"},
+    {q:"動態乘數為 $\\beta_1=0.5,\\ \\beta_2=0.2,\\ \\beta_3=0.1$，第 1 期的累積動態乘數為？", o:["0.2","0.5","0.7","0.8"], a:2, e:"第 1 期累積乘數 $=\\beta_1+\\beta_2=0.7$。"},
+    {q:"嚴格外生與過去與現在外生的關係是？", o:["兩者等價","過去與現在外生 ⇒ 嚴格外生","嚴格外生 ⇒ 過去與現在外生","兩者互斥"], a:2, e:"嚴格外生要求 $u_t$ 與過去、現在、未來的 $X$ 都無關，條件較強，因此蘊含過去與現在外生。"},
+    {q:"為什麼分配落後模型需要 HAC 標準誤？", o:["因為 $X$ 不是定態","因為誤差項有序列相關，一般標準誤失效","因為 OLS 不一致","因為有完全共線性"], a:1, e:"誤差有序列相關時 $f_T\\ne1$，一般或只考慮異質變異的標準誤會錯誤。"},
+    {q:"$T=216$ 時，依 $m=0.75T^{1/3}$ 的規則，Newey–West 截斷參數 $m$ 為？", o:["3","4","5","6"], a:2, e:"$216^{1/3}=6$，$0.75\\times6=4.5$，四捨五入為 5（無條件進位也是 5）。"},
+    {q:"哪一種估計方法「需要」嚴格外生才會一致？", o:["OLS＋HAC 標準誤","可行 GLS","直接估計累積乘數的 OLS","以上皆不需要"], a:1, e:"GLS 的準差分會讓 $\\tilde u_t$ 與 $X_{t+1}$ 有關，若嚴格外生不成立就不一致。"},
+    {q:"柳橙汁例子中，使用冰凍度日數（FDD）估計動態因果效果合理的原因是？", o:["FDD 是定態的","柳橙汁價格不會影響天氣，外生性假設合理","FDD 沒有序列相關","FDD 與價格完全相關"], a:1, e:"關鍵是外生性：天氣不受價格回饋影響，因此 $E(u_t|X_t,X_{t-1},\\dots)=0$ 合理。"},
+    {q:"在累積乘數的直接迴歸 $Y_t=\\delta_0+\\delta_1\\Delta X_t+\\cdots+\\delta_{r+1}X_{t-r}+u_t$ 中，$\\delta_{r+1}$ 是？", o:["衝擊效果","第 1 期動態乘數","長期累積乘數","誤差的自我相關"], a:2, e:"改寫後最後一項 $X_{t-r}$ 的係數等於所有 $\\beta$ 的和，也就是長期累積乘數。"}
+  ],
+  r:String.raw`# Ch16 動態因果效果：OLS + Newey-West HAC 標準誤
+library(dynlm); library(lmtest); library(sandwich)
+fit <- dynlm(FOJC_pctc ~ L(FDD, 0:6))       # 分配落後模型，r = 6
+
+T <- length(fit$residuals)
+m <- ceiling(0.75 * T^(1/3))                 # 課本截斷參數
+
+# sandwich::NeweyWest 的 lag 對應課本的 m - 1
+coeftest(fit, vcov = NeweyWest(fit, lag = m - 1, prewhite = FALSE, adjust = TRUE))
+
+# 直接估計累積乘數：Y on ΔX_t,...,ΔX_{t-5}, X_{t-6}
+cm <- dynlm(FOJC_pctc ~ L(d(FDD), 0:5) + L(FDD, 6))
+coeftest(cm, vcov = NeweyWest(cm, lag = m - 1, prewhite = FALSE, adjust = TRUE))
+# 註：取整方式（ceiling 或四捨五入）請依老師講義`
+},
+{
+  id:"17", title:"時間序列迴歸的其他主題", en:"Additional Topics in Time Series Regression",
+  week:"11/27、12/4",
+  sims:["garch","coint"],
+  notes:[
+    {h:"一、向量自我迴歸（VAR）", b:String.raw`
+<p>兩個變數的 VAR($p$)：每個變數都對自己與另一個變數的 $p$ 期落後項迴歸。</p>
+$$Y_t=\beta_{10}+\sum_{i=1}^{p}\beta_{1i}Y_{t-i}+\sum_{i=1}^{p}\gamma_{1i}X_{t-i}+u_{1t}$$
+$$X_t=\beta_{20}+\sum_{i=1}^{p}\beta_{2i}Y_{t-i}+\sum_{i=1}^{p}\gamma_{2i}X_{t-i}+u_{2t}$$
+<ul><li>逐條方程式用 OLS 估計即可。</li><li>落後期選擇：$\text{BIC}(p)=\ln[\det(\hat\Sigma_u)]+k(kp+1)\dfrac{\ln T}{T}$，$k$ 為變數個數。</li><li>可在 VAR 中做 Granger 因果檢定。</li></ul>`},
+    {h:"二、多期預測：迭代法與直接法", b:String.raw`
+<ul><li><b>迭代法</b>：估計一期模型，把預測值代回去一步一步往前推（例如 $\hat Y_{T+2|T}$ 用 $\hat Y_{T+1|T}$ 代替 $Y_{T+1}$）。</li><li><b>直接法</b>：直接用 $Y_{t+h}$ 對 $t$ 期以前的變數迴歸。誤差會有序列相關，需用 HAC 標準誤。</li><li>模型設定正確時迭代法較有效率；擔心一期模型設定錯誤時，直接法較穩健。</li></ul>`},
+    {h:"三、整合階次與 DF-GLS 檢定", b:String.raw`
+<ul><li>$I(0)$：定態；$I(1)$：差分一次後為定態（有一個單根）；$I(2)$：差分兩次後為定態。</li><li><b>DF-GLS 檢定</b>（Elliott、Rothenberg、Stock）：先用 GLS 去除截距（與趨勢），再做 DF 迴歸。檢定力比 ADF 高。</li><li>大樣本 5% 臨界值：只含截距約 −1.95，含時間趨勢約 −2.89。</li></ul>`},
+    {h:"四、共整合（Cointegration）", b:String.raw`
+<p>若 $X_t$、$Y_t$ 都是 $I(1)$，但存在 $\theta$ 使 $Y_t-\theta X_t$ 為 $I(0)$，則兩者<b>共整合</b>，$\theta$ 為共整合係數：兩者有共同的隨機趨勢，長期不會分開太遠。</p>
+<ul><li><b>θ 已知</b>：對 $z_t=Y_t-\theta X_t$ 做 DF 或 DF-GLS 檢定。</li><li><b>θ 未知（EG-ADF 檢定）</b>：先用 OLS 估計 $\theta$，再對殘差做 ADF 檢定，但要用 Engle–Granger 臨界值（一個 $X$ 時：10% −3.12、5% −3.41、1% −3.96）。</li><li><b>DOLS</b>：$Y_t$ 對 $X_t$ 與 $\Delta X$ 的領先、落後項迴歸，搭配 HAC 標準誤，可對 $\theta$ 做常態推論。</li></ul>
+<p><b>向量誤差修正模型（VECM）</b>：</p>
+$$\Delta Y_t=\beta_{10}+\sum_{i=1}^{p}\beta_{1i}\Delta Y_{t-i}+\sum_{i=1}^{p}\gamma_{1i}\Delta X_{t-i}+\alpha_1\left(Y_{t-1}-\theta X_{t-1}\right)+u_{1t}$$
+<p>誤差修正項 $Y_{t-1}-\theta X_{t-1}$ 反映偏離長期均衡的程度。</p>`},
+    {h:"五、波動叢聚：ARCH 與 GARCH", b:String.raw`
+<p>金融資料常見<b>波動叢聚</b>：大波動後面跟著大波動。條件變異數隨時間改變。</p>
+$$\text{ARCH}(p):\ \sigma_t^2=\alpha_0+\alpha_1u_{t-1}^2+\cdots+\alpha_pu_{t-p}^2$$
+$$\text{GARCH}(1,1):\ \sigma_t^2=\alpha_0+\alpha_1u_{t-1}^2+\phi_1\sigma_{t-1}^2$$
+<ul><li>$\alpha_1+\phi_1$ 越接近 1，波動越持久。</li><li>$\alpha_1+\phi_1<1$ 時，非條件變異數為 $\alpha_0/(1-\alpha_1-\phi_1)$。</li><li>以最大概似法估計，可用來建立隨時間變寬變窄的預測區間。</li></ul>`},
+    {h:"六、大量預測變數：動態因子模型", b:String.raw`
+<p>大量總體時間序列常由少數共同因子驅動。可用主成分估計因子，再把因子放進預測迴歸（呼應 Ch14 的主成分概念）。</p>`}
+  ],
+  formulas:[
+    {n:"VAR 落後期 BIC", t:String.raw`\text{BIC}(p)=\ln[\det(\hat\Sigma_u)]+k(kp+1)\frac{\ln T}{T}`, d:"k 個變數"},
+    {n:"共整合定義", t:String.raw`X_t,Y_t\sim I(1),\quad Y_t-\theta X_t\sim I(0)`, d:"θ 為共整合係數"},
+    {n:"EG-ADF 臨界值（1 個 X）", t:String.raw`-3.12\ (10\%),\ -3.41\ (5\%),\ -3.96\ (1\%)`, d:"不能用一般 DF 臨界值"},
+    {n:"VECM", t:String.raw`\Delta Y_t=\beta_{10}+\cdots+\alpha_1(Y_{t-1}-\theta X_{t-1})+u_{1t}`, d:"誤差修正項"},
+    {n:"ARCH(p)", t:String.raw`\sigma_t^2=\alpha_0+\alpha_1u_{t-1}^2+\cdots+\alpha_pu_{t-p}^2`, d:"條件變異數"},
+    {n:"GARCH(1,1)", t:String.raw`\sigma_t^2=\alpha_0+\alpha_1u_{t-1}^2+\phi_1\sigma_{t-1}^2`, d:"α₁+φ₁ 衡量持續性"},
+    {n:"GARCH 非條件變異數", t:String.raw`\text{var}(u_t)=\frac{\alpha_0}{1-\alpha_1-\phi_1}`, d:"需 α₁+φ₁<1"}
+  ],
+  quiz:[
+    {q:"VAR 模型通常如何估計？", o:["一定要用 GLS","逐條方程式以 OLS 估計","只能用最大概似法","用工具變數"], a:1, e:"VAR 每條方程式的迴歸元相同（所有變數的落後項），逐條 OLS 即可。"},
+    {q:"直接法多期預測的迴歸，為什麼需要 HAC 標準誤？", o:["因為迴歸元有完全共線性","因為 $h$ 期預測誤差彼此重疊，產生序列相關","因為資料是 $I(2)$","因為 OLS 有偏"], a:1, e:"$Y_{t+h}$ 的預測誤差包含 $t+1$ 到 $t+h$ 的衝擊，相鄰觀察值的誤差重疊，因此序列相關。"},
+    {q:"若 $\\Delta Y_t$ 是 $I(1)$，則 $Y_t$ 是？", o:["$I(0)$","$I(1)$","$I(2)$","無法判斷"], a:2, e:"$Y_t$ 要差分兩次才會是定態，所以是 $I(2)$。"},
+    {q:"$X_t$、$Y_t$ 為 $I(1)$，且 $Y_t-2X_t$ 為 $I(0)$，則？", o:["兩者沒有關係","兩者共整合，共整合係數 $\\theta=2$","兩者都是定態","兩者是 $I(2)$"], a:1, e:"這正是共整合的定義：兩個 $I(1)$ 序列的線性組合為 $I(0)$。"},
+    {q:"θ 未知時用 EG-ADF 檢定共整合，殘差的 ADF 統計量為 −3.0（一個 $X$），5% 顯著水準下？", o:["拒絕無共整合","無法拒絕無共整合","用 DF 臨界值 −2.86 判斷，拒絕","接受共整合"], a:1, e:"EG-ADF 的 5% 臨界值為 −3.41；$-3.0>-3.41$，無法拒絕「沒有共整合」。若誤用 DF 臨界值 −2.86 會錯誤拒絕。"},
+    {q:"VECM 中的誤差修正項 $Y_{t-1}-\\theta X_{t-1}$ 的意義是？", o:["短期衝擊","前一期偏離長期均衡的程度","預測誤差","條件變異數"], a:1, e:"共整合關係代表長期均衡，誤差修正項衡量上一期偏離均衡多少，讓變數往均衡調整。"},
+    {q:"GARCH(1,1) 中 $\\alpha_0=0.1,\\ \\alpha_1=0.1,\\ \\phi_1=0.8$，非條件變異數為？", o:["0.1","0.5","1","10"], a:2, e:"$\\alpha_0/(1-\\alpha_1-\\phi_1)=0.1/0.1=1$。"},
+    {q:"關於 DF-GLS 檢定，下列何者正確？", o:["檢定力通常比 ADF 低","先用 GLS 去除截距（與趨勢）再做 DF 迴歸，檢定力較高","用來檢定共整合","臨界值與常態分配相同"], a:1, e:"DF-GLS 先做 GLS 去趨勢，提高檢定力；臨界值仍是非常態的特殊值。"},
+    {q:"兩個彼此獨立的隨機漫步互相做 OLS 迴歸，最可能的結果是？", o:["係數接近 0 且不顯著","常常得到很高的 $R^2$ 與顯著的 t 統計量","殘差一定是定態","迴歸無法計算"], a:1, e:"這就是假性迴歸。殘差含隨機趨勢，t 統計量不服從常態，顯著的頻率遠高於 5%。"}
+  ],
+  r:String.raw`# Ch17 VAR、單根、共整合、GARCH
+library(vars); library(urca); library(dynlm); library(fGarch)
+
+# VAR：依 BIC 選落後期
+dat <- cbind(GDPGR, TSpread)
+VARselect(dat, lag.max = 8, type = "const")$selection
+v <- VAR(dat, p = 2, type = "const")
+causality(v, cause = "TSpread")$Granger      # Granger 因果
+predict(v, n.ahead = 4)                      # 迭代法多期預測
+
+# DF-GLS 檢定
+summary(ur.ers(y, type = "DF-GLS", model = "constant", lag.max = 4))
+
+# EG-ADF：先 OLS 估 θ，再對殘差做 ADF（要用 EG 臨界值！）
+eg <- lm(Y ~ X)
+summary(ur.df(residuals(eg), type = "none", lags = 2))
+
+# GARCH(1,1)
+g <- garchFit(~ garch(1, 1), data = returns, trace = FALSE)
+coef(g)                                       # omega = α0, alpha1, beta1 = φ1`
+}
+];
+
+</script>
+<script>
+"use strict";
+/* ───────── 音效（WebAudio 合成，不需音檔） ───────── */
+const SFX = {
+  on:true, ctx:null,
+  init(){ try { const v = localStorage.getItem("apw.sfx"); if (v !== null) this.on = v === "1"; } catch(e){} },
+  ac(){
+    if (!this.ctx){ const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; this.ctx = new C(); }
+    if (this.ctx.state === "suspended") this.ctx.resume().catch(() => {});
+    return this.ctx;
+  },
+  tone(f, t0, dur, type, vol, slide){
+    const a = this.ac(); if (!a) return;
+    const t = a.currentTime + t0, o = a.createOscillator(), g = a.createGain();
+    o.type = type || "sine"; o.frequency.setValueAtTime(f, t);
+    if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || .12, t + .012); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + .03);
+  },
+  meow(){
+    const a = this.ac(); if (!a) return;
+    const t = a.currentTime, p = 0.9 + Math.random() * 0.25;
+    const o = a.createOscillator(), f = a.createBiquadFilter(), g = a.createGain();
+    o.type = "sawtooth";
+    o.frequency.setValueAtTime(520 * p, t); o.frequency.exponentialRampToValueAtTime(900 * p, t + .13); o.frequency.exponentialRampToValueAtTime(600 * p, t + .4);
+    f.type = "bandpass"; f.Q.value = 2.5;
+    f.frequency.setValueAtTime(1100, t); f.frequency.exponentialRampToValueAtTime(1900, t + .13); f.frequency.exponentialRampToValueAtTime(900, t + .4);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(.2, t + .05); g.gain.exponentialRampToValueAtTime(0.0001, t + .44);
+    o.connect(f); f.connect(g); g.connect(a.destination); o.start(t); o.stop(t + .47);
+  },
+  play(name){
+    if (!this.on) return;
+    try {
+      const T = (...a) => this.tone(...a);
+      ({
+        pop:   () => T(620, 0, .09, "sine", .12, 900),
+        tab:   () => T(520, 0, .08, "triangle", .1, 700),
+        start: () => { T(392, 0, .12, "triangle", .12); T(523, .1, .16, "triangle", .12); },
+        done:  () => [523, 659, 784, 1047].forEach((f, i) => T(f, i * .09, .24, "triangle", .13)),
+        error: () => { T(330, 0, .18, "square", .05, 220); T(240, .17, .26, "square", .05, 160); },
+        add:   () => T(700, 0, .1, "sine", .12, 1100),
+        del:   () => T(520, 0, .16, "sine", .12, 230),
+        copy:  () => { T(784, 0, .08, "sine", .1); T(1047, .07, .12, "sine", .1); },
+        on:    () => { T(660, 0, .08, "sine", .1); T(990, .07, .1, "sine", .1); },
+        right: () => { T(880, 0, .1, "sine", .12); T(1320, .08, .16, "sine", .12); },
+        meow:  () => this.meow()
+      })[name]?.();
+    } catch(e){}
+  }
+};
+SFX.init();
+function confetti(){
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const box = document.createElement("div"); box.className = "confetti";
+  const cols = ["var(--accent)","var(--sun)","var(--mint)","var(--sky)","#ecb630"];
+  for (let i = 0; i < 46; i++){ const c = document.createElement("i"); c.style.left = Math.random() * 100 + "%"; c.style.background = cols[i % cols.length]; c.style.animationDelay = Math.random() * .35 + "s"; c.style.animationDuration = 1.1 + Math.random() * .8 + "s"; box.appendChild(c); }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 2600);
+}
+
+
+</script>
+<script>
+/* ───────── 六個世界的拱門插畫（原創 SVG，可互動） ───────── */
+const INK = "#1f1c3b";
+function door(inner, col, id, cls){
+  const pil = x => `<rect x="${x}" y="296" width="28" height="96" fill="${INK}"/>` + [6, 12, 18].map(d => `<line x1="${x + d + 2}" y1="306" x2="${x + d + 2}" y2="382" stroke="#f5eee2" stroke-width="2.4"/>`).join("");
+  return `<svg viewBox="0 0 300 430" class="doorsvg ${cls || ""}" aria-hidden="true">
+    <defs><clipPath id="clip${id}"><path d="M34 392 V170 A116 116 0 0 1 266 170 V392Z"/></clipPath>
+    <pattern id="ht${id}" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="${INK}" opacity=".16"/></pattern></defs>
+    <ellipse cx="150" cy="419" rx="150" ry="9" fill="${INK}" opacity=".16"/>
+    <path d="M16 392 V170 A134 134 0 0 1 284 170 V392Z" fill="${col}" stroke="${INK}" stroke-width="6"/>
+    <g clip-path="url(#clip${id})"><g class="scene">${inner}</g><rect width="300" height="400" fill="url(#ht${id})" pointer-events="none"/><g class="cfg"></g></g>
+    <path d="M34 392 V170 A116 116 0 0 1 266 170 V392" fill="none" stroke="${INK}" stroke-width="5"/>
+    ${pil(4)}${pil(268)}
+    <rect x="12" y="388" width="276" height="14" fill="#f5eee2" stroke="${INK}" stroke-width="5"/>
+    <rect x="2" y="400" width="296" height="15" fill="#f5eee2" stroke="${INK}" stroke-width="5"/>
+  </svg>`;
+}
+const COWS = [[70,300],[100,322],[132,296],[205,312],[236,296],[90,356],[150,350],[214,352],[248,338],[60,336],[178,334],[164,300],[190,292]];
+const S_RANCH = `<rect width="300" height="400" fill="#bfe6d4"/>
+  <circle cx="214" cy="118" r="26" fill="#ecb630" stroke="${INK}" stroke-width="4"/>
+  <path d="M0 290 Q80 246 160 280 T300 262 V400 H0Z" fill="#45b383" stroke="${INK}" stroke-width="4"/>
+  <path d="M0 338 Q110 298 300 326 V400 H0Z" fill="#2a8f66" stroke="${INK}" stroke-width="4"/>
+  ${[44,84,124,164,204,244].map(x => `<rect x="${x}" y="368" width="6" height="26" fill="#f5eee2" stroke="${INK}" stroke-width="2.5"/>`).join("")}
+  <line x1="40" y1="376" x2="262" y2="376" stroke="${INK}" stroke-width="3"/>
+  ${COWS.map(([x, y], i) => `<circle class="cow" cx="${x}" cy="${y}" r="7.5" fill="${i > 10 ? "#ef4f8f" : "#f5eee2"}" stroke="${INK}" stroke-width="3" style="animation-delay:${-(i * .37).toFixed(2)}s"/>`).join("")}
+  <path class="rope" pathLength="1" d="M46 70 Q120 120 150 230 Q158 262 170 276" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/>
+  <path class="rope" pathLength="1" d="M46 70 Q120 120 150 230 Q158 262 170 276" fill="none" stroke="#ef4f8f" stroke-width="4" stroke-linecap="round"/>
+  <g class="loopg"><ellipse class="loop" cx="177" cy="296" rx="30" ry="17" fill="none" stroke="${INK}" stroke-width="8"/><ellipse class="loop" cx="177" cy="296" rx="30" ry="17" fill="none" stroke="#ef4f8f" stroke-width="4"/></g>
+  <rect x="52" y="196" width="58" height="34" rx="4" fill="#f5eee2" stroke="${INK}" stroke-width="4"/>
+  <line x1="81" y1="230" x2="81" y2="262" stroke="${INK}" stroke-width="5"/>
+  <text class="lam" x="81" y="220" text-anchor="middle" font-family="Instrument Serif,serif" font-style="italic" font-size="20" fill="${INK}">λ = 1</text>`;
+const S_WEATHER = `<rect width="300" height="400" fill="#a9c6ff"/>
+  <g class="cloud" stroke="${INK}" stroke-width="4" fill="#f5eee2"><path d="M60 128 a18 18 0 0 1 30 -14 a22 22 0 0 1 40 6 a16 16 0 0 1 4 30 h-70 a14 14 0 0 1 -4 -22z"/></g>
+  <g class="cloud c2" stroke="${INK}" stroke-width="4" fill="#f5eee2"><path d="M190 96 a14 14 0 0 1 24 -10 a18 18 0 0 1 32 6 a12 12 0 0 1 0 24 h-52 a12 12 0 0 1 -4 -20z"/></g>
+  <path d="M0 340 Q150 312 300 340 V400 H0Z" fill="#2f55d4" stroke="${INK}" stroke-width="4"/>
+  <line x1="94" y1="294" x2="88" y2="348" stroke="${INK}" stroke-width="6"/><line x1="206" y1="294" x2="212" y2="348" stroke="${INK}" stroke-width="6"/>
+  <rect x="56" y="168" width="188" height="132" rx="6" fill="#f5eee2" stroke="${INK}" stroke-width="5"/>
+  ${[198,228,258].map(y => `<line x1="68" y1="${y}" x2="232" y2="${y}" stroke="${INK}" stroke-width="1.5" opacity=".25"/>`).join("")}
+  <polygon class="fan" points="170,236 232,196 232,282" fill="#ef4f8f" opacity=".35"/>
+  <path class="hist" pathLength="1" d="M68 248 L82 232 L94 252 L108 222 L122 238 L136 214 L150 244 L162 226 L170 236" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>
+  <line class="fc" x1="170" y1="236" x2="232" y2="240" stroke="#ef4f8f" stroke-width="3.5" stroke-dasharray="6 5"/>
+  <line x1="170" y1="178" x2="170" y2="292" stroke="${INK}" stroke-width="2" stroke-dasharray="3 4"/>
+  <text x="196" y="190" font-family="Space Mono,monospace" font-weight="700" font-size="12" fill="${INK}">T+h</text>
+  <line x1="150" y1="168" x2="150" y2="128" stroke="${INK}" stroke-width="4"/><path class="vane" d="M150 132 l22 -8 l-6 10 z" fill="#ecb630" stroke="${INK}" stroke-width="3"/>`;
+const S_ORCHARD = (() => {
+  const tree = (x, s) => `<rect x="${x - 7}" y="${300 - 60 * s}" width="14" height="${70 * s}" fill="#8a5a33" stroke="${INK}" stroke-width="3.5"/>
+    <circle cx="${x}" cy="${290 - 76 * s}" r="${46 * s}" fill="#2f8f5a" stroke="${INK}" stroke-width="4"/>
+    ${[[-20,-10],[14,-24],[22,6],[-8,16],[-26,-34],[4,-2]].map(([dx, dy]) => `<circle cx="${x + dx * s}" cy="${290 - 76 * s + dy * s}" r="${6.5 * s}" fill="#f26a2e" stroke="${INK}" stroke-width="2.5"/>`).join("")}`;
+  const flake = (x, y, i) => `<g class="flake" style="animation-duration:${(4 + (i % 4) * 1.3).toFixed(1)}s;animation-delay:${-(i * .9).toFixed(1)}s"><g stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"><line x1="${x - 6}" y1="${y}" x2="${x + 6}" y2="${y}"/><line x1="${x}" y1="${y - 6}" x2="${x}" y2="${y + 6}"/><line x1="${x - 4}" y1="${y - 4}" x2="${x + 4}" y2="${y + 4}"/><line x1="${x - 4}" y1="${y + 4}" x2="${x + 4}" y2="${y - 4}"/></g></g>`;
+  return `<rect width="300" height="400" fill="#d6cdf2"/>
+  ${[[70,96],[130,74],[200,104],[240,150],[60,170],[160,140],[110,200],[226,216],[180,60],[90,40]].map((p, i) => flake(p[0], p[1], i)).join("")}
+  <path d="M0 316 Q150 290 300 318 V400 H0Z" fill="#f5eee2" stroke="${INK}" stroke-width="4"/>
+  ${tree(98, 1)}${tree(196, .82)}
+  <rect x="226" y="236" width="22" height="92" rx="11" fill="#f5eee2" stroke="${INK}" stroke-width="4"/>
+  <rect class="merc" x="233" y="276" width="8" height="46" fill="#e0453a"/><circle class="bulb" cx="237" cy="330" r="14" fill="#e0453a" stroke="${INK}" stroke-width="4"/>
+  <rect x="58" y="338" width="64" height="38" fill="#e9b45a" stroke="${INK}" stroke-width="4"/>
+  ${[72,90,108].map(x => `<circle cx="${x}" cy="336" r="8" fill="#f26a2e" stroke="${INK}" stroke-width="2.5"/>`).join("")}
+  <g class="ptagg"><path d="M146 336 h52 l10 12 l-10 12 h-52z" fill="#ecb630" stroke="${INK}" stroke-width="3.5"/>
+  <text class="ptag" x="172" y="353" text-anchor="middle" font-family="Space Mono,monospace" font-weight="700" font-size="13" fill="${INK}">P 0%</text></g>`;
+})();
+const S_WALK = `<rect width="300" height="400" fill="#211d47"/>
+  ${[[60,90],[110,70],[180,96],[240,140],[80,150],[150,120],[210,70],[60,220]].map(([x, y], i) => `<circle class="star" cx="${x}" cy="${y}" r="2.8" fill="#ecb630" style="animation-delay:${-(i * .45).toFixed(2)}s"/>`).join("")}
+  <path d="M212 96 a26 26 0 1 0 22 40 a20 20 0 1 1 -22 -40z" fill="#ecb630" stroke="${INK}" stroke-width="3"/>
+  <path d="M0 344 Q150 326 300 344 V400 H0Z" fill="#3b3478" stroke="${INK}" stroke-width="4"/>
+  <polygon points="232,178 186,372 286,372" fill="#ecb630" opacity=".3"/>
+  <line x1="232" y1="170" x2="232" y2="372" stroke="#f5eee2" stroke-width="7"/><line x1="232" y1="170" x2="232" y2="372" stroke="${INK}" stroke-width="2"/>
+  <path d="M214 170 h36 l-6 12 h-24z" fill="#f5eee2" stroke="${INK}" stroke-width="3.5"/>
+  <path class="leash" d="M138 312 Q160 330 176 340" fill="none" stroke="#ecb630" stroke-width="3.5"/>
+  <g class="walker">
+    <circle cx="112" cy="268" r="14" fill="#f6d7b8" stroke="${INK}" stroke-width="3.5"/>
+    <path d="M98 262 q14 -18 28 0" fill="${INK}"/>
+    <rect x="98" y="284" width="28" height="44" rx="12" fill="#ef4f8f" stroke="${INK}" stroke-width="3.5"/>
+    <path d="M104 326 l-6 34 M120 326 l8 34" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M124 300 l14 12" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g class="dog">
+    <ellipse cx="190" cy="352" rx="20" ry="11" fill="#f5eee2" stroke="${INK}" stroke-width="3.5"/>
+    <circle cx="176" cy="340" r="9" fill="#f5eee2" stroke="${INK}" stroke-width="3.5"/>
+    <path d="M170 334 l-2 -10 l8 6z" fill="${INK}"/>
+    <path d="M208 348 q10 -10 8 -18" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M180 362 v10 M200 362 v10" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+  <rect x="86" y="374" width="128" height="18" rx="9" fill="${INK}" opacity=".8"/>
+  <text class="walklbl" x="150" y="387" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-weight="700" font-size="11" fill="#f5eee2">有牽繩・共整合</text>`;
+const S_ARENA = `<rect width="300" height="400" fill="#c22f5e"/>
+  ${[50,80,110,140,170,200,230,260].map(x => `<path d="M${x} 40 q-8 180 0 360" fill="none" stroke="#8e1f45" stroke-width="5"/>`).join("")}
+  <polygon class="spot" points="150,60 80,360 220,360" fill="#fff3c4" opacity=".45"/>
+  <path d="M0 40 ${Array.from({length:11}, () => `q14 26 28 0`).join(" ")} V0 H0Z" fill="#ecb630" stroke="${INK}" stroke-width="4"/>
+  <rect y="356" width="300" height="44" fill="${INK}"/>
+  <rect x="62" y="318" width="56" height="40" fill="#f5eee2" stroke="${INK}" stroke-width="4"/>
+  <rect x="118" y="292" width="64" height="66" fill="#f5eee2" stroke="${INK}" stroke-width="4"/>
+  <rect x="182" y="330" width="56" height="28" fill="#f5eee2" stroke="${INK}" stroke-width="4"/>
+  <text x="150" y="334" text-anchor="middle" font-family="Space Mono,monospace" font-weight="700" font-size="24" fill="${INK}">1</text>
+  <text x="90" y="346" text-anchor="middle" font-family="Space Mono,monospace" font-weight="700" font-size="18" fill="${INK}">2</text>
+  <text x="210" y="352" text-anchor="middle" font-family="Space Mono,monospace" font-weight="700" font-size="16" fill="${INK}">3</text>
+  <g class="trophy">
+    <path d="M130 222 h40 v14 a20 20 0 0 1 -40 0z" fill="#ecb630" stroke="${INK}" stroke-width="4"/>
+    <path d="M130 228 h-10 a10 10 0 0 0 12 14 M170 228 h10 a10 10 0 0 1 -12 14" fill="none" stroke="${INK}" stroke-width="3.5"/>
+    <rect x="144" y="256" width="12" height="18" fill="#ecb630" stroke="${INK}" stroke-width="3.5"/><rect x="134" y="272" width="32" height="10" fill="#ecb630" stroke="${INK}" stroke-width="3.5"/>
+    <text x="150" y="246" text-anchor="middle" font-family="Instrument Serif,serif" font-style="italic" font-size="18" fill="${INK}">A+</text>
+  </g>`;
+const S_SHOP = `<rect width="300" height="400" fill="#f3d27a"/>
+  ${Array.from({length:18}, (_, r) => Array.from({length:19}, (_, c) => `<circle cx="${c * 16 + 8}" cy="${r * 16 + 8}" r="2" fill="#c9a24a"/>`).join("")).join("")}
+  <rect y="300" width="300" height="100" fill="#f5eee2"/>
+  <g class="lamp"><line x1="150" y1="40" x2="150" y2="104" stroke="${INK}" stroke-width="4"/>
+  <path d="M128 120 a22 22 0 0 1 44 0z" fill="${INK}"/><ellipse cx="150" cy="122" rx="20" ry="5" fill="#ecb630"/>
+  <polygon points="150,124 92,292 208,292" fill="#fff3c4" opacity=".5"/></g>
+  <g class="wrench"><path d="M64 150 l20 20 m-4 -26 a12 12 0 1 0 6 18 l34 34" fill="none" stroke="${INK}" stroke-width="7" stroke-linecap="round"/></g>
+  <rect x="210" y="146" width="12" height="54" fill="#8a5a33" stroke="${INK}" stroke-width="3.5"/><rect x="198" y="134" width="36" height="16" rx="3" fill="#7c8291" stroke="${INK}" stroke-width="3.5"/>
+  <rect x="34" y="292" width="232" height="18" fill="#8a5a33" stroke="${INK}" stroke-width="4"/>
+  <rect x="50" y="310" width="12" height="90" fill="${INK}"/><rect x="238" y="310" width="12" height="90" fill="${INK}"/>
+  <path d="M96 290 l54 -14 l54 14 l-54 8z" fill="#ffffff" stroke="${INK}" stroke-width="3.5"/>
+  <line x1="150" y1="276" x2="150" y2="298" stroke="${INK}" stroke-width="2.5"/>
+  <g class="mk-bad"><path d="M112 281 l12 8 m0 -8 l-12 8" stroke="#e0453a" stroke-width="3.5" stroke-linecap="round"/></g>
+  <g class="mk-fix" opacity="0"><path d="M110 284 l6 6 l12 -10" fill="none" stroke="#1f8a5e" stroke-width="3.5" stroke-linecap="round"/></g>
+  <path d="M164 282 l6 6 l12 -10" fill="none" stroke="#1f8a5e" stroke-width="3.5" stroke-linecap="round"/>
+  <rect x="96" y="318" width="108" height="20" rx="10" fill="${INK}"/>
+  <text class="fixlbl" x="150" y="332" text-anchor="middle" font-family="Noto Sans TC,sans-serif" font-weight="700" font-size="11" fill="#f5eee2">待修理 1 題</text>`;
+
+const WORLDS = [
+  {n:"01", key:"14", name:"預測牧場", en:"Big Data & Shrinkage", text:"八百個預測變數在草原上奔跑，你的套索只抓得住幾個。", col:"#1f9e7a", card:"dark", scene:S_RANCH, hint:"點窗戶甩套索，看 Lasso 選中哪幾個變數"},
+  {n:"02", key:"15", name:"預測氣象台", en:"Time Series & Forecasting", text:"明天會變天嗎？線索只藏在昨天和前天的資料裡。", col:"#2f55d4", card:"light", scene:S_WEATHER, hint:"點窗戶產生新的時間序列與預測區間"},
+  {n:"03", key:"16", name:"結霜果園", en:"Dynamic Causal Effects", text:"一場寒流落在佛羅里達，柳橙汁價格要好幾個月才平靜下來。", col:"#f26a2e", card:"dark", scene:S_ORCHARD, hint:"點窗戶叫來寒流，看價格的動態乘數慢慢消退"},
+  {n:"04", key:"17", name:"深夜散步", en:"VAR · Cointegration · GARCH", text:"醉漢和他的狗各自亂走，一條牽繩讓他們永遠走不遠。", col:"#6b4bd8", card:"light", scene:S_WALK, hint:"點窗戶解開或繫上牽繩，比較有無共整合"},
+  {n:"05", key:"mix", name:"期末競技場", en:"Mixed Quiz", text:"四個世界的題目隨機登場，十二題定勝負。", col:"#ef4f8f", card:"dark", scene:S_ARENA, hint:"點窗戶讓獎盃跳起來"},
+  {n:"06", key:"wrong", name:"錯題修理鋪", en:"Mistake Review", text:"答錯的題目都送來這裡，修好一題就少一題。", col:"#ecb630", card:"light", scene:S_SHOP, hint:"點窗戶修理筆記本上的錯題"}
+];
+const DOME = `<svg viewBox="0 0 760 190" class="dome" aria-hidden="true" preserveAspectRatio="none">
+  <defs><pattern id="domeDots" width="34" height="26" patternUnits="userSpaceOnUse"><circle cx="9" cy="9" r="7.5" fill="#4a33a8"/><circle cx="26" cy="9" r="3" fill="#ecb630"/><circle cx="26" cy="22" r="7.5" fill="#4a33a8"/><circle cx="9" cy="22" r="2.6" fill="#ef4f8f"/></pattern>
+  <clipPath id="domeClip"><path d="M0 190 Q380 60 760 190Z"/></clipPath></defs>
+  <line x1="150" y1="62" x2="150" y2="140" stroke="${INK}" stroke-width="5"/><path class="flag" d="M152 62 l46 14 l-46 14z" fill="#ef4f8f" stroke="${INK}" stroke-width="4"/>
+  <line x1="610" y1="62" x2="610" y2="140" stroke="${INK}" stroke-width="5"/><path class="flag f2" d="M612 62 l46 14 l-46 14z" fill="#f26a2e" stroke="${INK}" stroke-width="4"/>
+  <line x1="290" y1="66" x2="290" y2="84" stroke="${INK}" stroke-width="6"/><line x1="470" y1="66" x2="470" y2="84" stroke="${INK}" stroke-width="6"/>
+  <path d="M0 190 Q380 60 760 190Z" fill="#6b4bd8"/>
+  <g clip-path="url(#domeClip)"><rect width="760" height="190" fill="url(#domeDots)"/></g>
+  <path d="M0 190 Q380 60 760 190" fill="none" stroke="${INK}" stroke-width="6"/>
+  <line x1="0" y1="188" x2="760" y2="188" stroke="${INK}" stroke-width="5"/>
+</svg>`;
+
+/* ───────── 窗戶互動 ───────── */
+function retrigger(el, cls){ if (!el) return; el.classList.remove(cls); void el.getBoundingClientRect(); el.classList.add(cls); }
+const SNS = "http://www.w3.org/2000/svg";
+const FX = {
+  "14"(svg){
+    const cows = [...svg.querySelectorAll(".cow")];
+    const i = Math.floor(Math.random() * cows.length);
+    const pos = c => [+c.getAttribute("cx"), +c.getAttribute("cy")];
+    const [x0, y0] = pos(cows[i]);
+    const order = cows.map((c, k) => [k, Math.hypot(pos(c)[0] - x0, pos(c)[1] - y0)]).sort((a, b) => a[1] - b[1]);
+    const lamPick = [0.5, 1, 2, 4][Math.floor(Math.random() * 4)];
+    const nPick = lamPick >= 2 ? 1 : lamPick >= 1 ? 2 : 3;
+    const chosen = order.slice(0, nPick).map(o => o[0]);
+    cows.forEach((c, k) => c.setAttribute("fill", chosen.includes(k) ? "#ef4f8f" : "#f5eee2"));
+    const pts = chosen.map(k => pos(cows[k])); const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length, cy = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+    const rx = 18 + 12 * nPick, ry = 14 + 3 * nPick;
+    svg.querySelectorAll(".loop").forEach(l => { l.setAttribute("cx", cx); l.setAttribute("cy", cy); l.setAttribute("rx", rx); l.setAttribute("ry", ry); });
+    const d = `M46 70 Q120 120 ${cx - 24} ${cy - 70} Q${cx - 10} ${cy - 36} ${cx - 6} ${cy - ry}`;
+    svg.querySelectorAll(".rope").forEach(r => r.setAttribute("d", d));
+    svg.querySelector(".lam").textContent = `λ = ${lamPick}`;
+    retrigger(svg.querySelector(".scene"), "throw"); retrigger(svg.querySelector(".loopg"), "pop");
+    SFX.play("add");
+  },
+  "15"(svg){
+    const xs = Array.from({length:9}, (_, i) => 68 + i * 12.75); let y = 236, v = (Math.random() - .5) * 20; const ys = [];
+    xs.forEach(() => { v = .5 * v + (Math.random() - .5) * 26; y = Math.max(196, Math.min(284, 240 + v)); ys.push(y); });
+    svg.querySelector(".hist").setAttribute("d", xs.map((x, i) => (i ? "L" : "M") + x.toFixed(1) + " " + ys[i].toFixed(1)).join(" "));
+    const yl = ys[ys.length - 1], yf = yl + (240 - yl) * .6;
+    svg.querySelector(".fan").setAttribute("points", `170,${yl} 232,${yf - 42} 232,${yf + 42}`);
+    const fc = svg.querySelector(".fc"); fc.setAttribute("y1", yl); fc.setAttribute("y2", yf);
+    retrigger(svg.querySelector(".scene"), "redraw"); retrigger(svg.querySelector(".vane"), "spin");
+    SFX.play("tab");
+  },
+  "16"(svg){
+    if (svg._frost) return; svg._frost = true;
+    const merc = svg.querySelector(".merc"), tag = svg.querySelector(".ptag"), tg = svg.querySelector(".ptagg");
+    svg.classList.add("frost"); merc.setAttribute("y", "306"); merc.setAttribute("height", "16");
+    const seq = ["P +8%", "P +5%", "P +3%", "P +2%", "P +1%", "P 0%"]; let k = 0;
+    const step = () => { tag.textContent = seq[k]; retrigger(tg, "pop"); if (k === 0) SFX.play("del"); k++; if (k < seq.length) setTimeout(step, 650); else { svg.classList.remove("frost"); merc.setAttribute("y", "276"); merc.setAttribute("height", "46"); svg._frost = false; } };
+    step();
+  },
+  "17"(svg){
+    const st = WALK.get(svg); if (!st) return; st.leash = !st.leash;
+    svg.querySelector(".walklbl").textContent = st.leash ? "有牽繩・共整合" : "沒牽繩・各走各的";
+    svg.querySelector(".leash").style.display = st.leash ? "" : "none";
+    SFX.play(st.leash ? "right" : "pop");
+  },
+  "mix"(svg){
+    retrigger(svg.querySelector(".trophy"), "jump");
+    const g = svg.querySelector(".cfg"); const cols = ["#ecb630", "#ef4f8f", "#2f55d4", "#1f9e7a", "#f5eee2"];
+    for (let i = 0; i < 28; i++){ const r = document.createElementNS(SNS, "rect"); r.setAttribute("x", 50 + Math.random() * 200); r.setAttribute("y", 60 + Math.random() * 60); r.setAttribute("width", 6); r.setAttribute("height", 9); r.setAttribute("fill", cols[i % 5]); r.setAttribute("stroke", INK); r.setAttribute("stroke-width", 1.2); r.setAttribute("class", "cf"); r.style.animationDelay = (Math.random() * .25) + "s"; g.appendChild(r); }
+    setTimeout(() => { g.innerHTML = ""; }, 1700);
+    SFX.play("done");
+  },
+  "wrong"(svg){
+    svg._fixed = !svg._fixed;
+    svg.querySelector(".mk-bad").setAttribute("opacity", svg._fixed ? "0" : "1");
+    svg.querySelector(".mk-fix").setAttribute("opacity", svg._fixed ? "1" : "0");
+    svg.querySelector(".fixlbl").textContent = svg._fixed ? "全部修好了！" : "待修理 1 題";
+    retrigger(svg.querySelector(".wrench"), "spin");
+    SFX.play(svg._fixed ? "right" : "pop");
+  }
+};
+/* 深夜散步：醉漢（隨機漫步）與狗（與醉漢的距離是定態 AR 過程＝共整合） */
+const WALK = new WeakMap();
+function gauss(){ let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+let walkLast = 0;
+function walkTick(ts){
+  requestAnimationFrame(walkTick);
+  if (ts - walkLast < 70 || document.hidden) return; walkLast = ts;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.querySelectorAll(".walk-scene").forEach(svg => {
+    let st = WALK.get(svg); if (!st){ st = {x:112, z:0, d:190, leash:true}; WALK.set(svg, st); }
+    st.x += gauss() * 1.5; if (st.x < 70) st.x = 140 - st.x; if (st.x > 160) st.x = 320 - st.x;
+    if (st.leash){ st.z = .9 * st.z + gauss() * 1.6; st.d += ((st.x + 72 + st.z * 3) - st.d) * .25; }
+    else { st.d += gauss() * 3.2; }
+    if (st.d < 70) st.d = 140 - st.d; if (st.d > 236) st.d = 472 - st.d;
+    const dx = st.x - 112, dd = st.d - 190;
+    svg.querySelector(".walker").setAttribute("transform", `translate(${dx.toFixed(1)} 0)`);
+    svg.querySelector(".dog").setAttribute("transform", `translate(${dd.toFixed(1)} 0)`);
+    svg.querySelector(".leash").setAttribute("d", `M${(138 + dx).toFixed(1)} 312 Q${((138 + dx + 176 + dd) / 2).toFixed(1)} ${330 + Math.max(0, 30 - Math.abs(176 + dd - 138 - dx) / 3)} ${(176 + dd).toFixed(1)} 340`);
+  });
+}
+requestAnimationFrame(walkTick);
+
+</script>
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(msg){ const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2400); }
+const LS = {
+  get(k, d){ try { const v = localStorage.getItem("er3." + k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem("er3." + k, JSON.stringify(v)); } catch(e){} }
+};
+
+/* ───────── MathJax ───────── */
+function typeset(el){
+  if (!el || !window.MathJax || !MathJax.typesetPromise) return;
+  MathJax.startup.promise.then(() => MathJax.typesetPromise([el])).catch(() => {});
+}
+
+/* ───────── 狀態與路由 ───────── */
+const TABS = [["notes","筆記"],["sim","互動模擬"],["cards","公式卡"],["quiz","測驗"],["r","R 小抄"]];
+const S = { ch:"map", tab:"notes", best:LS.get("best", {}), wrong:LS.get("wrong", []), quiz:null };
+const chap = id => CH.find(c => c.id === id);
+function parseHash(){
+  const h = location.hash.replace("#", "");
+  let m;
+  if (h === "" || h === "map"){ S.ch = "map"; return; }
+  if (h === "mix" || h === "wrong"){ S.ch = h; S.tab = "quiz"; return; }
+  if ((m = h.match(/^ch(14|15|16|17)(?:-(notes|sim|cards|quiz|r))?$/))){ S.ch = m[1]; S.tab = m[2] || "notes"; }
+}
+function setHash(){ const h = (S.ch === "map" || S.ch === "mix" || S.ch === "wrong") ? S.ch : `ch${S.ch}-${S.tab}`; if (location.hash !== "#" + h) history.replaceState(null, "", "#" + h); }
+
+/* ───────── 地圖首頁與世界內頁 ───────── */
+function daysToFinal(){ const n = new Date(); const today = new Date(n.getFullYear(), n.getMonth(), n.getDate()); return Math.round((new Date(2026, 11, 18) - today) / 86400000); }
+function renderSide(){}
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="#1f1c3b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#1f1c3b"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>`;
+const SPK_X = `<svg viewBox="0 0 24 24" fill="none" stroke="#1f1c3b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#1f1c3b"/><path d="M17 9l5 6M22 9l-5 6"/></svg>`;
+const sndBtn = sm => `<button class="snd ${sm ? "sm" : ""}" type="button" data-snd aria-pressed="${SFX.on}" aria-label="${SFX.on ? "關閉音效" : "開啟音效"}">${SFX.on ? SPK : SPK_X}<span class="note" aria-hidden="true">♪</span></button>`;
+function renderSfx(){ document.querySelectorAll("[data-snd]").forEach(b => { b.outerHTML = sndBtn(b.classList.contains("sm")); }); }
+const worldOf = k => WORLDS.find(w => w.key === k);
+function stars(p){ if (p == null) return ""; const n = p >= .9 ? 3 : p >= .7 ? 2 : p >= .4 ? 1 : 0; return `<span class="stars" aria-label="${n} 顆星">${"★".repeat(n)}${"☆".repeat(3 - n)}</span>`; }
+function worldStat(w){
+  if (w.key === "wrong") return S.wrong.length ? `${S.wrong.length} 題等你修理` : "目前沒有錯題";
+  const b = S.best[w.key]; return b == null ? "尚未挑戰" : `${stars(b)} 最佳 ${Math.round(b * 100)}%`;
+}
+function mapView(){
+  const d = daysToFinal();
+  return `<header class="hero">
+    <h1 class="logo">Econometrics <em>Quest</em></h1>
+    <div class="zh-sub">經濟實證三・期末冒險</div>
+    <div class="tag">六個世界，闖過期末考</div>
+    <div class="howto">點拱門裡的窗戶可以玩，按卡片上的「進入」開始複習。</div>
+    <div class="hero-ctrls">${d >= 0 ? `<span class="ticket">期末考倒數 <b>${d}</b> 天</span>` : `<span class="ticket">期末考辛苦了！</span>`}${sndBtn(false)}</div>
+  </header>
+  <div class="map" id="map">
+    <svg id="road" aria-hidden="true"></svg>
+    ${DOME}
+    ${WORLDS.map((w, i) => `<section class="world ${i % 2 ? "w-right" : "w-left"}" style="--wc:${w.col}">
+      <button class="door" type="button" data-poke="${w.key}" title="${esc(w.hint)}" aria-label="${esc(w.hint)}">${door(w.scene, w.col, "m" + i, w.key === "17" ? "walk-scene" : "")}</button>
+      <div class="wcard ${w.card}">
+        <span class="num">${w.n}</span>
+        <h3>${w.name}</h3>
+        <div class="en">${w.key.length === 2 ? "Ch" + w.key + "・" : ""}${esc(w.en)}</div>
+        <p>${esc(w.text)}</p>
+        <div class="stat">${worldStat(w)}</div>
+        <button class="enter" type="button" data-ch="${w.key}">進入 <span>→</span></button>
+      </div>
+    </section>`).join("")}
+  </div>
+  <div class="foot">內容依 Stock &amp; Watson《Introduction to Econometrics》第 4 版 Ch14–17 整理，考試範圍與符號以老師講義為準。<br>成績與錯題只存在這個瀏覽器。</div>`;
+}
+function drawRoad(){
+  const map = $("#map"), svg = $("#road"); if (!map || !svg) return;
+  const mr = map.getBoundingClientRect(); const pts = [];
+  const dome = map.querySelector(".dome").getBoundingClientRect();
+  pts.push([mr.width / 2 + 40, dome.bottom - mr.top - 8]);
+  map.querySelectorAll(".door").forEach(d => { const r = d.getBoundingClientRect(); pts.push([r.left - mr.left + r.width / 2, r.top - mr.top + r.height * .52]); });
+  const last = pts[pts.length - 1]; pts.push([mr.width / 2, last[1] + 160]);
+  let p = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++){ const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; const dy = (y1 - y0) * .55; p += ` C${x0} ${y0 + dy} ${x1} ${y1 - dy} ${x1} ${y1}`; }
+  const w = Math.max(30, Math.min(48, mr.width * .07));
+  svg.setAttribute("height", mr.height); svg.setAttribute("viewBox", `0 0 ${mr.width} ${mr.height}`);
+  svg.innerHTML = `<path d="${p}" fill="none" stroke="#1f1c3b" stroke-width="${w + 8}" stroke-linecap="round"/><path d="${p}" fill="none" stroke="#ecc66a" stroke-width="${w}" stroke-linecap="round"/><path d="${p}" fill="none" stroke="#1f1c3b" stroke-width="4" stroke-dasharray="12 22" stroke-linecap="round"/>`;
+}
+const TIPS = {
+  notes:"重點都畫上螢光筆了，公式記不住就去「公式卡」翻一翻。",
+  sim:"拉拉看滑桿！親手玩過一次，比背公式記得更牢。",
+  cards:"點卡片翻面。先想想答案，再翻過來對答案喔。",
+  quiz:"選項每次都會重新洗牌，答錯的題目會自動送去錯題修理鋪。",
+  r:"這些是常用套件的寫法，變數名稱請換成你的資料。",
+  map:""
+};
+function worldHead(w, c){
+  const special = !c;
+  return `<header class="whead" style="--wc:${w.col}">
+    <div>
+      <div class="row1"><button class="back" type="button" data-ch="map">← 回地圖</button>${sndBtn(true)}</div>
+      <span class="num">${w.n}</span>
+      <div class="kicker">${special ? esc(w.en) : `Ch${c.id}・${esc(c.en)}`}</div>
+      <h2>${w.name}</h2>
+      <div class="sub">${special ? (w.key === "mix" ? "從 Ch14–17 隨機抽 12 題" : "答錯過的題目，答對就會從這裡移除") : `${esc(c.title)}・上課週次 ${esc(c.week)}`}</div>
+    </div>
+    <button class="thumb" type="button" data-poke="${w.key}" title="${esc(w.hint)}" aria-label="${esc(w.hint)}">${door(w.scene, w.col, "h", w.key === "17" ? "walk-scene" : "")}</button>
+  </header>`;
+}
+function render(keepScroll){
+  setHash();
+  const root = $("#app");
+  if (S.ch === "map"){ root.innerHTML = `<div class="wrap">${mapView()}</div>`; requestAnimationFrame(drawRoad); setTimeout(drawRoad, 400); if (!keepScroll) window.scrollTo({top:0}); return; }
+  const w = worldOf(S.ch); const special = S.ch === "mix" || S.ch === "wrong"; const c = special ? null : chap(S.ch);
+  let h = `<div class="wrap" style="--wc:${w.col}">${worldHead(w, c)}`;
+  h += special ? `<div style="height:18px"></div>` : `<nav class="tabs" role="tablist" aria-label="學習模式">${TABS.map(([k, n]) => `<button class="tab" role="tab" type="button" aria-selected="${S.tab === k}" data-tab="${k}">${n}</button>`).join("")}</nav>`;
+  h += `<div class="work" id="work"><div class="tipbar"><div class="bubble"><b>提示：</b>${esc(TIPS[special ? "quiz" : S.tab])}</div></div>`;
+  if (special || S.tab === "quiz") h += `<div id="quizArea"></div>`;
+  else if (S.tab === "notes") h += `<div class="stack">${c.notes.map(n => `<section class="card note"><h3>${esc(n.h)}</h3>${n.b}</section>`).join("")}</div>`;
+  else if (S.tab === "sim") h += `<div class="stack">${c.sims.map(id => `<section class="card sim" id="sim-${id}"></section>`).join("")}</div>`;
+  else if (S.tab === "cards") h += `<div class="cards">${c.formulas.map((f, i) => `<button class="flip" type="button" data-flip="${i}" aria-label="${esc(f.n)}，點擊翻面"><div class="inner"><div class="face front"><b>${esc(f.n)}</b><span>點我翻面</span></div><div class="face back"><div class="fx">$$${f.t}$$</div><div class="d">${esc(f.d)}</div></div></div></button>`).join("")}</div>`;
+  else if (S.tab === "r") h += `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap"><b>Ch${c.id} R 程式範例</b><button class="btn sm" type="button" data-copyr>複製程式碼</button></div><pre class="code">${hlR(c.r)}</pre></div>`;
+  h += `</div></div>`;
+  root.innerHTML = h;
+  if (special || S.tab === "quiz") startQuiz();
+  if (S.tab === "sim" && !special) c.sims.forEach(id => SIMS[id] && SIMS[id].mount($("#sim-" + id)));
+  typeset($("#work"));
+  if (!keepScroll) window.scrollTo({top:0});
+}
+function hlR(code){ return code.split("\n").map(l => { const i = l.indexOf("#"); return i < 0 ? esc(l) : esc(l.slice(0, i)) + `<span class="cm">${esc(l.slice(i))}</span>`; }).join("\n"); }
+
+/* ───────── 測驗 ───────── */
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function allQs(){ return CH.flatMap(c => c.quiz.map((q, i) => ({...q, id:`${c.id}-${i}`, ch:c.id}))); }
+function startQuiz(){
+  let list;
+  if (S.ch === "mix") list = shuffle(allQs()).slice(0, 12);
+  else if (S.ch === "wrong") list = shuffle(allQs().filter(q => S.wrong.includes(q.id)));
+  else list = shuffle(allQs().filter(q => q.ch === S.ch));
+  S.quiz = {list:list.map(q => ({...q, order:shuffle(q.o.map((_, i) => i))})), idx:0, score:0, picked:null, key:S.ch};
+  renderQuiz();
+}
+function renderQuiz(){
+  const Q = S.quiz, el = $("#quizArea"); if (!el) return;
+  if (!Q.list.length){ el.innerHTML = `<div class="card result"><div class="big">★</div><b>錯題本是空的！</b><p class="muted small">去各章測驗練習，答錯的題目會出現在這裡。</p></div>`; return; }
+  if (Q.idx >= Q.list.length){
+    const pct = Q.score / Q.list.length;
+    if (S.ch !== "wrong"){ if (S.best[S.ch] == null || pct > S.best[S.ch]){ S.best[S.ch] = pct; LS.set("best", S.best); } }
+    renderSide();
+    const msg = pct === 1 ? "全對！撒彩帶慶祝！" : pct >= .8 ? "很棒！只差一點點。" : pct >= .5 ? "有進步空間，看看錯題的解析吧。" : "先回去看筆記，再來挑戰一次！";
+    el.innerHTML = `<div class="qwrap"><div class="card result"><div class="stars-big">${"★".repeat(pct >= .9 ? 3 : pct >= .7 ? 2 : pct >= .4 ? 1 : 0)}${"☆".repeat(3 - (pct >= .9 ? 3 : pct >= .7 ? 2 : pct >= .4 ? 1 : 0))}</div><div class="big">${Q.score} / ${Q.list.length}</div><b>${msg}</b>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="btn primary" type="button" data-retry>再測一次</button>${S.wrong.length ? `<button class="btn" type="button" data-ch="wrong">去錯題本（${S.wrong.length}）</button>` : ""}</div></div></div>`;
+    if (pct >= .8){ SFX.play("done"); confetti(); } else SFX.play("tab");
+    return;
+  }
+  const q = Q.list[Q.idx]; const answered = Q.picked != null;
+  const L = "ABCD";
+  el.innerHTML = `<div class="qwrap">
+    <div class="qhead"><b>第 ${Q.idx + 1} / ${Q.list.length} 題</b><div class="qprog"><i style="width:${Q.idx / Q.list.length * 100}%"></i></div><span class="small muted">答對 ${Q.score}</span></div>
+    <div class="card qcard"><span class="qtag">Ch${q.ch}</span><div class="qq">${q.q}</div>
+      <div class="opts">${q.order.map((oi, k) => {
+        let cls = ""; if (answered){ if (oi === q.a) cls = "right"; else if (oi === Q.picked) cls = "wrong"; }
+        return `<button class="opt ${cls}" type="button" data-pick="${oi}" ${answered ? "disabled" : ""}><span class="k">${L[k]}</span><span>${q.o[oi]}</span></button>`;
+      }).join("")}</div>
+      ${answered ? `<div class="expl"><b>${Q.picked === q.a ? "答對了！" : "再想想看～"}</b>${q.e}</div>` : ""}
+    </div>
+    ${answered ? `<div class="qfoot"><button class="btn primary" type="button" data-next>${Q.idx + 1 < Q.list.length ? "下一題 →" : "看結果"}</button></div>` : ""}
+  </div>`;
+  typeset(el);
+}
+function pick(oi){
+  const Q = S.quiz, q = Q.list[Q.idx]; if (Q.picked != null) return;
+  Q.picked = oi;
+  if (oi === q.a){ Q.score++; SFX.play("right"); S.wrong = S.wrong.filter(x => x !== q.id); }
+  else { SFX.play("error"); if (!S.wrong.includes(q.id)) S.wrong.push(q.id); }
+  LS.set("wrong", S.wrong); renderQuiz(); renderSide();
+}
+
+/* ───────── 圖表工具 ───────── */
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function cv(c){ const dpr = window.devicePixelRatio || 1; const w = c.clientWidth, h = c.clientHeight; c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); const x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); return {x, w, h}; }
+function nice(v){ const a = Math.abs(v); return a >= 100 ? v.toFixed(0) : a >= 10 ? v.toFixed(1) : v.toFixed(2).replace(/\.?0+$/, "") || "0"; }
+function axes(x, w, h, min, max, P){
+  x.font = `11px ${cssv("--f-body")}`; x.fillStyle = cssv("--muted"); x.strokeStyle = cssv("--line"); x.lineWidth = 1; x.textAlign = "right"; x.textBaseline = "middle";
+  const yv = v => P.t + (h - P.t - P.b) * (1 - (v - min) / (max - min));
+  for (let k = 0; k <= 4; k++){ const v = min + (max - min) * k / 4; const y = yv(v); x.beginPath(); x.moveTo(P.l, y); x.lineTo(w - P.r, y); x.stroke(); x.fillText(nice(v), P.l - 6, y); }
+  if (min < 0 && max > 0){ x.strokeStyle = cssv("--muted"); x.beginPath(); x.moveTo(P.l, yv(0)); x.lineTo(w - P.r, yv(0)); x.stroke(); }
+  return yv;
+}
+function lineChart(c, series, opt){
+  opt = opt || {}; const {x, w, h} = cv(c); const P = {l:44, r:12, t:12, b:22};
+  let min = opt.min ?? Infinity, max = opt.max ?? -Infinity;
+  if (opt.min == null || opt.max == null) series.forEach(s => s.d.forEach(v => { if (isFinite(v)){ if (opt.min == null) min = Math.min(min, v); if (opt.max == null) max = Math.max(max, v); } }));
+  if (min === max){ min -= 1; max += 1; } const pad = (max - min) * .06; if (opt.min == null) min -= pad; if (opt.max == null) max += pad;
+  const yv = axes(x, w, h, min, max, P); const n = Math.max(...series.map(s => s.d.length));
+  const xv = i => P.l + (w - P.l - P.r) * i / Math.max(1, n - 1);
+  x.textAlign = "center"; x.textBaseline = "top"; x.fillStyle = cssv("--muted");
+  [0, Math.floor((n - 1) / 2), n - 1].forEach(i => x.fillText(String(i + (opt.x0 ?? 0)), xv(i), h - P.b + 6));
+  series.forEach(s => { x.strokeStyle = s.c; x.lineWidth = s.w || 1.6; x.beginPath(); s.d.forEach((v, i) => { const X = xv(i), Y = yv(Math.max(min, Math.min(max, v))); i ? x.lineTo(X, Y) : x.moveTo(X, Y); }); x.stroke(); });
+  (opt.hlines || []).forEach(hl => { if (hl.v < min || hl.v > max) return; x.setLineDash([5, 4]); x.strokeStyle = hl.c; x.lineWidth = 1.4; x.beginPath(); x.moveTo(P.l, yv(hl.v)); x.lineTo(w - P.r, yv(hl.v)); x.stroke(); x.setLineDash([]); x.fillStyle = hl.c; x.textAlign = "left"; x.textBaseline = "bottom"; x.fillText(hl.label, P.l + 4, yv(hl.v) - 2); });
+}
+function barChart(c, groups, opt){
+  // groups: [{label, bars:[{v,c,ghost}]}], opt.line: [{v}] overlay, opt.min/max
+  opt = opt || {}; const {x, w, h} = cv(c); const P = {l:44, r:12, t:12, b:24};
+  const vals = groups.flatMap(g => g.bars.map(b => b.v)).concat((opt.line || []).map(p => p.v)).concat(opt.extra || []);
+  let min = Math.min(0, ...vals), max = Math.max(0, ...vals); if (opt.min != null) min = opt.min; if (opt.max != null) max = opt.max;
+  if (min === max) max = min + 1; const pad = (max - min) * .08; if (opt.max == null) max += pad; if (opt.min == null && min < 0) min -= pad;
+  const yv = axes(x, w, h, min, max, P); const gw = (w - P.l - P.r) / groups.length;
+  groups.forEach((g, i) => {
+    const nb = g.bars.length; const bw = Math.min(26, gw * .7 / nb);
+    g.bars.forEach((b, j) => {
+      const X = P.l + gw * i + gw / 2 - (nb * bw) / 2 + j * bw; const y0 = yv(0), y1 = yv(b.v);
+      x.fillStyle = b.c; x.globalAlpha = b.ghost ? .3 : 1;
+      const top = Math.min(y0, y1), hh = Math.max(1, Math.abs(y1 - y0)); x.beginPath(); x.roundRect ? x.roundRect(X + 1, top, bw - 2, hh, 4) : x.rect(X + 1, top, bw - 2, hh); x.fill(); x.globalAlpha = 1;
+    });
+    x.fillStyle = cssv("--muted"); x.textAlign = "center"; x.textBaseline = "top"; x.fillText(g.label, P.l + gw * i + gw / 2, h - P.b + 6);
+  });
+  if (opt.line){ x.strokeStyle = opt.lineColor; x.lineWidth = 2.2; x.beginPath(); opt.line.forEach((p, i) => { const X = P.l + gw * i + gw / 2, Y = yv(p.v); i ? x.lineTo(X, Y) : x.moveTo(X, Y); }); x.stroke();
+    opt.line.forEach((p, i) => { const X = P.l + gw * i + gw / 2, Y = yv(p.v); x.fillStyle = opt.lineColor; x.beginPath(); x.arc(X, Y, i === opt.line.length - 1 ? 5 : 3.2, 0, 7); x.fill(); }); }
+}
+
+/* ───────── 統計小工具 ───────── */
+function randn(){ let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+const shocks = n => Array.from({length:n}, randn);
+function ols1(y, x, intercept){
+  const n = y.length; intercept = intercept !== false;
+  const mx = intercept ? x.reduce((a, b) => a + b, 0) / n : 0, my = intercept ? y.reduce((a, b) => a + b, 0) / n : 0;
+  let sxx = 0, sxy = 0, syy = 0; for (let i = 0; i < n; i++){ const dx = x[i] - mx, dy = y[i] - my; sxx += dx * dx; sxy += dx * dy; syy += dy * dy; }
+  const b1 = sxy / sxx, b0 = my - b1 * mx; let ssr = 0; const res = new Array(n);
+  for (let i = 0; i < n; i++){ res[i] = y[i] - b0 - b1 * x[i]; ssr += res[i] * res[i]; }
+  const df = n - (intercept ? 2 : 1); const se = Math.sqrt(ssr / df / sxx);
+  return {b0, b1, se, t:b1 / se, r2:1 - ssr / syy, res};
+}
+function dfStat(y, intercept){ const dy = [], yl = []; for (let t = 1; t < y.length; t++){ dy.push(y[t] - y[t-1]); yl.push(y[t-1]); } return ols1(dy, yl, intercept).t; }
+function acf(y, K){ const n = y.length, m = y.reduce((a, b) => a + b, 0) / n; let c0 = 0; for (const v of y) c0 += (v - m) ** 2; return Array.from({length:K}, (_, k) => { let s = 0; for (let t = k + 1; t < n; t++) s += (y[t] - m) * (y[t - k - 1] - m); return s / c0; }); }
+const fmt = (v, d) => (v < 0 ? "−" : "") + Math.abs(v).toFixed(d ?? 2);
+
+/* ───────── 互動模擬 ───────── */
+function slider(id, label, min, max, step, val){ return `<div class="ctrl"><label for="${id}">${label}<output id="${id}-o">${val}</output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+function bindRange(root, ids, fn){ ids.forEach(id => { const el = root.querySelector("#" + id); el.addEventListener("input", () => { root.querySelector("#" + id + "-o").textContent = el.value; fn(); }); }); }
+const SIMS = {
+  shrink:{ mount(root){
+    const B = [2.4, -1.8, 1.2, 0.9, -0.6, 0.4, 0.25, -0.1]; let method = "ridge";
+    root.innerHTML = `<h3>Ridge 與 Lasso 的縮減</h3><p class="lead">假設 8 個預測變數彼此正交且標準化。淡色長條是 OLS 估計值，深色是縮減後的估計值。調大 $\\lambda$，比較兩種方法：Ridge 等比例縮小，Lasso 會把小係數直接設為 0。</p>
+      <div class="ctrls"><div class="seg" role="group" aria-label="方法"><button type="button" data-m="ridge" aria-pressed="true">Ridge</button><button type="button" data-m="lasso" aria-pressed="false">Lasso</button></div>${slider("lam", "懲罰參數 λ", 0, 6, 0.1, 1)}</div>
+      <canvas class="ch" id="cvShrink" role="img" aria-label="OLS 與縮減估計值長條圖"></canvas>
+      <div class="legend"><span><i style="background:${cssv("--sky")};opacity:.35"></i>OLS</span><span><i style="background:${cssv("--accent")}"></i>縮減後</span></div>
+      <div class="readouts" id="roShrink"></div>`;
+    const draw = () => {
+      const lam = +root.querySelector("#lam").value;
+      const est = B.map(b => method === "ridge" ? b / (1 + lam) : Math.sign(b) * Math.max(Math.abs(b) - lam / 2, 0));
+      barChart(root.querySelector("#cvShrink"), B.map((b, i) => ({label:"β" + (i + 1), bars:[{v:b, c:cssv("--sky"), ghost:true}, {v:est[i], c:cssv("--accent")}]})), {min:-2.6, max:2.6});
+      const zeros = est.filter(v => v === 0).length; const shrinkPct = 1 - est.reduce((a, v) => a + Math.abs(v), 0) / B.reduce((a, v) => a + Math.abs(v), 0);
+      root.querySelector("#roShrink").innerHTML = `<div class="ro"><b>${zeros}</b><span>個係數為 0</span></div><div class="ro"><b>${Math.round(shrinkPct * 100)}%</b><span>係數絕對值總和縮減</span></div><div class="ro"><b>${method === "ridge" ? "÷ (1+λ)" : "門檻 λ/2 = " + (lam / 2).toFixed(2)}</b><span>${method === "ridge" ? "等比例縮小" : "小於門檻設為 0"}</span></div>`;
+    };
+    root.querySelectorAll("[data-m]").forEach(b => b.addEventListener("click", () => { method = b.dataset.m; root.querySelectorAll("[data-m]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); SFX.play("pop"); draw(); }));
+    bindRange(root, ["lam"], draw); draw();
+  }},
+  mspe:{ mount(root){
+    root.innerHTML = `<h3>預測變數越多，OLS 越吃虧</h3><p class="lead">$\\text{MSPE}_{OLS}\\approx(1+k/n)\\sigma_u^2$。固定樣本數 $n$，看看預測變數個數 $k$ 增加時，OLS 的 MSPE 比「知道真實模型」時高出多少。</p>
+      <div class="ctrls">${slider("nn", "樣本數 n", 50, 1000, 10, 200)}${slider("kk", "預測變數個數 k", 1, 990, 1, 40)}</div>
+      <canvas class="ch short" id="cvMspe" role="img" aria-label="MSPE 隨 k 變化"></canvas><div class="readouts" id="roMspe"></div>`;
+    const draw = () => {
+      const n = +root.querySelector("#nn").value; const kEl = root.querySelector("#kk"); kEl.max = n - 1; if (+kEl.value > n - 1){ kEl.value = n - 1; root.querySelector("#kk-o").textContent = n - 1; }
+      const k = +kEl.value; const pts = Array.from({length:50}, (_, i) => 1 + (i / 49) * (n - 1) / n);
+      lineChart(root.querySelector("#cvMspe"), [{d:pts, c:cssv("--sky"), w:2}], {min:1, max:2, hlines:[{v:1 + k / n, c:cssv("--accent"), label:`目前 k=${k}`}]});
+      root.querySelector("#roMspe").innerHTML = `<div class="ro"><b>${(k / n).toFixed(2)}</b><span>k / n</span></div><div class="ro ${k / n > .3 ? "bad" : ""}"><b>${(1 + k / n).toFixed(2)} σ²</b><span>OLS 的 MSPE</span></div><div class="ro"><b>+${Math.round(k / n * 100)}%</b><span>比 oracle 多出的誤差</span></div>`;
+    };
+    bindRange(root, ["nn", "kk"], draw); draw();
+  }},
+  ar:{ mount(root){
+    let e = shocks(200);
+    root.innerHTML = `<h3>AR(1) 模擬與 Dickey–Fuller 檢定</h3><p class="lead">$Y_t=\\phi Y_{t-1}+u_t$。$|\\phi|<1$ 時序列為定態，會回到平均；$\\phi=1$ 時是隨機漫步（單根）。同一組隨機衝擊下拉動 $\\phi$，觀察序列、自我相關圖與 DF 檢定結果。</p>
+      <div class="ctrls">${slider("phi", "φ", -0.9, 1, 0.05, 0.5)}<button class="btn sm" type="button" data-re>重新抽樣</button></div>
+      <div class="two"><div><div class="small muted">序列 $Y_t$（T = 200）</div><canvas class="ch" id="cvAr" role="img" aria-label="AR(1) 序列"></canvas></div>
+      <div><div class="small muted">樣本自我相關 $\\hat\\rho_j$，j = 1…12</div><canvas class="ch" id="cvAcf" role="img" aria-label="自我相關圖"></canvas></div></div>
+      <div class="readouts" id="roAr"></div><div id="vdAr"></div>`;
+    const draw = () => {
+      const phi = +root.querySelector("#phi").value; const y = [e[0]]; for (let t = 1; t < e.length; t++) y.push(phi * y[t-1] + e[t]);
+      lineChart(root.querySelector("#cvAr"), [{d:y, c:cssv("--accent"), w:1.6}]);
+      const r = acf(y, 12); barChart(root.querySelector("#cvAcf"), r.map((v, i) => ({label:String(i + 1), bars:[{v, c:cssv("--sky")}]})), {min:-1, max:1});
+      const t = dfStat(y, true); const rej = t < -2.86;
+      root.querySelector("#roAr").innerHTML = `<div class="ro"><b>${fmt(r[0])}</b><span>$\\hat\\rho_1$</span></div><div class="ro"><b>${fmt(t)}</b><span>DF t 統計量</span></div><div class="ro"><b>−2.86</b><span>5% 臨界值（只含截距）</span></div>`;
+      root.querySelector("#vdAr").innerHTML = `<div class="verdict ${rej ? "good" : "bad"}">${rej ? "拒絕單根虛無假設：資料支持定態" : "無法拒絕單根：序列可能有隨機趨勢"}${phi >= .9 && phi < 1 && !rej ? "（φ 接近 1 時 DF 檢定的檢定力很低）" : ""}</div>`;
+      typeset(root.querySelector("#roAr"));
+    };
+    root.querySelector("[data-re]").addEventListener("click", () => { e = shocks(200); SFX.play("pop"); draw(); });
+    bindRange(root, ["phi"], draw); draw();
+  }},
+  spurious:{ mount(root){
+    let diff = false;
+    root.innerHTML = `<h3>假性迴歸蒙地卡羅實驗</h3><p class="lead">產生兩個<b>互相獨立</b>的隨機漫步 $X_t$、$Y_t$，用 OLS 把 $Y$ 對 $X$ 迴歸，重複 500 次，計算 $|t|>1.96$ 的比例。真實係數是 0，正常應該只有約 5% 會「顯著」。</p>
+      <div class="ctrls"><div class="seg" role="group" aria-label="資料形式"><button type="button" data-d="0" aria-pressed="true">用水準值迴歸</button><button type="button" data-d="1" aria-pressed="false">先取一階差分</button></div>${slider("tt", "樣本長度 T", 50, 400, 50, 100)}<button class="btn sm primary" type="button" data-run>跑 500 次</button></div>
+      <div class="small muted">其中一次模擬的兩條序列</div><canvas class="ch short" id="cvSp" role="img" aria-label="兩條獨立隨機漫步"></canvas>
+      <div class="legend"><span><i style="background:${cssv("--accent")}"></i>Y</span><span><i style="background:${cssv("--sky")}"></i>X</span></div>
+      <div class="readouts" id="roSp"></div><div id="vdSp"></div>`;
+    const run = () => {
+      const T = +root.querySelector("#tt").value; let rej = 0, r2s = 0, ex = null; const R = 500;
+      for (let r = 0; r < R; r++){
+        const a = shocks(T), b = shocks(T); let x = [], y = [];
+        if (diff){ x = a; y = b; } else { let sx = 0, sy = 0; for (let t = 0; t < T; t++){ sx += a[t]; sy += b[t]; x.push(sx); y.push(sy); } }
+        const o = ols1(y, x); if (Math.abs(o.t) > 1.96) rej++; r2s += o.r2; if (!ex) ex = {x, y, o};
+      }
+      lineChart(root.querySelector("#cvSp"), [{d:ex.y, c:cssv("--accent")}, {d:ex.x, c:cssv("--sky")}]);
+      const rate = rej / R;
+      root.querySelector("#roSp").innerHTML = `<div class="ro ${rate > .1 ? "bad" : "good"}"><b>${(rate * 100).toFixed(1)}%</b><span>錯誤「顯著」的比例</span></div><div class="ro"><b>5%</b><span>名目顯著水準</span></div><div class="ro"><b>${(r2s / R).toFixed(2)}</b><span>平均 $R^2$</span></div>`;
+      root.querySelector("#vdSp").innerHTML = `<div class="verdict ${rate > .1 ? "bad" : "good"}">${rate > .1 ? "假性迴歸！兩條無關的序列卻經常得到顯著結果，而且 T 越大越嚴重。" : "差分後序列為定態，拒絕率回到 5% 附近，t 檢定恢復正常。"}</div>`;
+      typeset(root.querySelector("#roSp")); SFX.play(rate > .1 ? "error" : "right");
+    };
+    root.querySelectorAll("[data-d]").forEach(b => b.addEventListener("click", () => { diff = b.dataset.d === "1"; root.querySelectorAll("[data-d]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); run(); }));
+    root.querySelector("[data-run]").addEventListener("click", run);
+    bindRange(root, ["tt"], () => {}); run();
+  }},
+  dl:{ mount(root){
+    const B = [0.50, 0.20, 0.10, 0.05, 0.02, 0.00];
+    root.innerHTML = `<h3>動態乘數與累積乘數</h3><p class="lead">輸入分配落後模型 $Y_t=\\beta_0+\\beta_1X_t+\\cdots+\\beta_6X_{t-5}+u_t$ 的係數。長條是各期動態乘數，折線是累積動態乘數，最後一點是長期累積乘數。</p>
+      <div class="ctrls">${B.map((b, i) => `<label class="small" style="display:grid;gap:2px"><span>$\\beta_${i + 1}$（第 ${i} 期）</span><input class="numin" type="number" step="0.01" id="b${i}" value="${b}"></label>`).join("")}</div>
+      <canvas class="ch" id="cvDl" role="img" aria-label="動態乘數長條與累積乘數折線"></canvas>
+      <div class="legend"><span><i style="background:${cssv("--sky")}"></i>動態乘數</span><span><i style="background:${cssv("--accent")}"></i>累積動態乘數</span></div><div class="readouts" id="roDl"></div>`;
+    const draw = () => {
+      const b = B.map((_, i) => +root.querySelector("#b" + i).value || 0); let s = 0; const cum = b.map(v => (s += v));
+      barChart(root.querySelector("#cvDl"), b.map((v, i) => ({label:`h=${i}`, bars:[{v, c:cssv("--sky")}]})), {line:cum.map(v => ({v})), lineColor:cssv("--accent")});
+      const half = cum.findIndex(v => Math.abs(v) >= Math.abs(s) / 2);
+      root.querySelector("#roDl").innerHTML = `<div class="ro"><b>${fmt(b[0])}</b><span>衝擊效果 β₁</span></div><div class="ro"><b>${fmt(cum[1])}</b><span>第 1 期累積乘數</span></div><div class="ro"><b>${fmt(s)}</b><span>長期累積乘數</span></div><div class="ro"><b>${half < 0 ? "—" : "h = " + half}</b><span>累積達長期效果一半</span></div>`;
+    };
+    root.querySelectorAll(".numin").forEach(el => el.addEventListener("input", draw)); typeset(root); draw();
+  }},
+  nw:{ mount(root){
+    root.innerHTML = `<h3>Newey–West 截斷參數計算機</h3><p class="lead">課本規則 $m=0.75\\,T^{1/3}$。權重 $(m-j)/m$ 隨落後期遞減。R 的 <code>sandwich::NeweyWest()</code> 中 <code>lag</code> 參數對應 $m-1$。</p>
+      <div class="ctrls">${slider("tn", "樣本數 T", 20, 800, 1, 216)}</div>
+      <canvas class="ch short" id="cvNw" role="img" aria-label="Newey-West 權重"></canvas><div class="readouts" id="roNw"></div>`;
+    const draw = () => {
+      const T = +root.querySelector("#tn").value; const raw = .75 * Math.cbrt(T); const m = Math.max(1, Math.round(raw));
+      const wts = Array.from({length:Math.max(1, m - 1)}, (_, j) => (m - j - 1) / m);
+      barChart(root.querySelector("#cvNw"), wts.map((v, j) => ({label:`j=${j + 1}`, bars:[{v, c:cssv("--mint")}]})), {min:0, max:1});
+      root.querySelector("#roNw").innerHTML = `<div class="ro"><b>${raw.toFixed(2)}</b><span>0.75 T^(1/3)</span></div><div class="ro good"><b>${m}</b><span>m（四捨五入）</span></div><div class="ro"><b>${Math.ceil(raw)}</b><span>無條件進位</span></div><div class="ro"><b>${m - 1}</b><span>R 的 lag 參數（m−1）</span></div>`;
+    };
+    bindRange(root, ["tn"], draw); typeset(root); draw();
+  }},
+  garch:{ mount(root){
+    let z = shocks(500);
+    root.innerHTML = `<h3>GARCH(1,1) 與波動叢聚</h3><p class="lead">$u_t=\\sigma_tz_t$，$\\sigma_t^2=\\alpha_0+\\alpha_1u_{t-1}^2+\\phi_1\\sigma_{t-1}^2$，$\\alpha_0=0.05$。$\\alpha_1+\\phi_1$ 越接近 1，大波動後面越容易跟著大波動。</p>
+      <div class="ctrls">${slider("ga", "α₁（ARCH 項）", 0, 0.3, 0.01, 0.1)}${slider("gp", "φ₁（GARCH 項）", 0, 0.98, 0.01, 0.85)}<button class="btn sm" type="button" data-re>重新抽樣</button></div>
+      <div class="small muted">報酬 $u_t$</div><canvas class="ch short" id="cvG1" role="img" aria-label="模擬報酬"></canvas>
+      <div class="small muted" style="margin-top:8px">條件標準差 $\\sigma_t$</div><canvas class="ch short" id="cvG2" role="img" aria-label="條件標準差"></canvas>
+      <div class="readouts" id="roG"></div><div id="vdG"></div>`;
+    const draw = () => {
+      const a1 = +root.querySelector("#ga").value, p1 = +root.querySelector("#gp").value, a0 = .05, pers = a1 + p1;
+      let s2 = pers < 1 ? a0 / (1 - pers) : 1; const u = [], sd = [];
+      for (let t = 0; t < z.length; t++){ if (t){ s2 = a0 + a1 * u[t-1] ** 2 + p1 * s2; } s2 = Math.min(s2, 1e6); sd.push(Math.sqrt(s2)); u.push(Math.sqrt(s2) * z[t]); }
+      lineChart(root.querySelector("#cvG1"), [{d:u, c:cssv("--accent"), w:1.1}]);
+      lineChart(root.querySelector("#cvG2"), [{d:sd, c:cssv("--mint"), w:1.8}], {min:0});
+      root.querySelector("#roG").innerHTML = `<div class="ro ${pers >= 1 ? "bad" : ""}"><b>${pers.toFixed(2)}</b><span>持續性 α₁+φ₁</span></div><div class="ro"><b>${pers < 1 ? (a0 / (1 - pers)).toFixed(2) : "∞"}</b><span>非條件變異數</span></div>`;
+      root.querySelector("#vdG").innerHTML = pers >= 1 ? `<div class="verdict bad">α₁+φ₁ ≥ 1：非條件變異數不存在，波動會越來越大。</div>` : "";
+    };
+    root.querySelector("[data-re]").addEventListener("click", () => { z = shocks(500); SFX.play("pop"); draw(); });
+    bindRange(root, ["ga", "gp"], draw); typeset(root); draw();
+  }},
+  coint:{ mount(root){
+    let ex = shocks(200), ez = shocks(200);
+    root.innerHTML = `<h3>共整合與 EG-ADF 檢定</h3><p class="lead">$X_t$ 是隨機漫步，$Y_t=\\theta X_t+z_t$，$z_t=\\rho z_{t-1}+e_t$。$\\rho<1$ 時 $z_t$ 定態，$X$、$Y$ 共整合；$\\rho=1$ 時兩者各走各的。先用 OLS 估 $\\theta$，再對殘差做 DF 檢定，與 Engle–Granger 臨界值 −3.41 比較。</p>
+      <div class="ctrls">${slider("th", "θ", 0.5, 2, 0.1, 1)}${slider("rho", "ρ（偏離均衡的持續性）", 0, 1, 0.05, 0.6)}<button class="btn sm" type="button" data-re>重新抽樣</button></div>
+      <div class="two"><div><div class="small muted">$X_t$ 與 $Y_t$</div><canvas class="ch" id="cvC1" role="img" aria-label="X 與 Y"></canvas><div class="legend"><span><i style="background:${cssv("--accent")}"></i>Y</span><span><i style="background:${cssv("--sky")}"></i>X</span></div></div>
+      <div><div class="small muted">殘差 $\\hat z_t=Y_t-\\hat\\theta X_t$</div><canvas class="ch" id="cvC2" role="img" aria-label="共整合殘差"></canvas></div></div>
+      <div class="readouts" id="roC"></div><div id="vdC"></div>`;
+    const draw = () => {
+      const th = +root.querySelector("#th").value, rho = +root.querySelector("#rho").value;
+      const X = [], Z = []; let sx = 0, zz = 0; for (let t = 0; t < 200; t++){ sx += ex[t]; zz = rho * zz + ez[t]; X.push(sx); Z.push(zz); }
+      const Y = X.map((v, i) => th * v + Z[i]); const o = ols1(Y, X); const tstat = dfStat(o.res, false); const rej = tstat < -3.41;
+      lineChart(root.querySelector("#cvC1"), [{d:Y, c:cssv("--accent")}, {d:X, c:cssv("--sky")}]);
+      lineChart(root.querySelector("#cvC2"), [{d:o.res, c:cssv("--mint"), w:1.6}]);
+      root.querySelector("#roC").innerHTML = `<div class="ro"><b>${o.b1.toFixed(3)}</b><span>OLS 估計的 θ</span></div><div class="ro"><b>${fmt(tstat)}</b><span>殘差的 DF 統計量</span></div><div class="ro"><b>−3.41</b><span>EG 5% 臨界值</span></div>`;
+      root.querySelector("#vdC").innerHTML = `<div class="verdict ${rej ? "good" : "bad"}">${rej ? "拒絕「沒有共整合」：X 與 Y 有長期均衡關係" : "無法拒絕「沒有共整合」"}${!rej && rho < 1 && rho >= .85 ? "（ρ 接近 1 時檢定力低，容易判斷不出共整合）" : ""}</div>`;
+    };
+    root.querySelector("[data-re]").addEventListener("click", () => { ex = shocks(200); ez = shocks(200); SFX.play("pop"); draw(); });
+    bindRange(root, ["th", "rho"], draw); typeset(root); draw();
+  }}
+};
+
+/* ───────── 事件 ───────── */
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return; const d = b.dataset;
+  if (d.snd !== undefined){ SFX.on = !SFX.on; try { localStorage.setItem("apw.sfx", SFX.on ? "1" : "0"); } catch(x){} renderSfx(); SFX.play("on"); return; }
+  if (d.poke){ const svg = b.querySelector("svg"); if (svg && FX[d.poke]) FX[d.poke](svg); return; }
+  if (d.ch){ const from = S.ch; S.ch = d.ch; if (d.ch === "mix" || d.ch === "wrong") S.tab = "quiz"; else if (d.ch !== "map" && (from === "map" || from === "mix" || from === "wrong")) S.tab = "notes"; SFX.play("tab"); render(); return; }
+  if (d.tab){ S.tab = d.tab; SFX.play("tab"); render(); return; }
+  if (d.flip !== undefined){ b.classList.toggle("on"); SFX.play("pop"); return; }
+  if (d.pick !== undefined){ pick(+d.pick); return; }
+  if (d.next !== undefined){ S.quiz.idx++; S.quiz.picked = null; SFX.play("tab"); renderQuiz(); return; }
+  if (d.retry !== undefined){ SFX.play("tab"); startQuiz(); return; }
+  if (d.copyr !== undefined){ navigator.clipboard.writeText(chap(S.ch).r).then(() => { SFX.play("copy"); toast("已複製程式碼"); }).catch(() => toast("無法複製，請手動選取")); return; }
+});
+document.addEventListener("keydown", e => {
+  if ((S.tab === "quiz") && S.quiz && !/INPUT|TEXTAREA/.test(e.target.tagName)){
+    const Q = S.quiz; if (Q.idx < Q.list.length && Q.picked == null && /^[1-4a-dA-D]$/.test(e.key)){ const k = /\d/.test(e.key) ? +e.key - 1 : "abcd".indexOf(e.key.toLowerCase()); const q = Q.list[Q.idx]; if (q.order[k] != null) pick(q.order[k]); }
+    else if (Q.picked != null && e.key === "Enter"){ Q.idx++; Q.picked = null; renderQuiz(); }
+  }
+});
+window.addEventListener("hashchange", () => { const pc = S.ch, pt = S.tab; parseHash(); if (pc !== S.ch || pt !== S.tab) render(); });
+let rT, lastW = innerWidth; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(() => { if (S.ch === "map") drawRoad(); else if (S.tab === "sim" && innerWidth !== lastW) render(true); lastW = innerWidth; }, 200); });
+/* ───────── 啟動 ───────── */
+parseHash(); render();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (S.ch === "map") drawRoad(); });
+
+
+</script>
+</body>
+</html>
